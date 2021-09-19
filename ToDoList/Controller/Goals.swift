@@ -218,11 +218,13 @@ class Goals: UIViewController {
     var days: [String] = []
 
     public var delegate: GoalProtocol!
+    var pickerValueChanges = false
 
     let realm = try! Realm()
     var selRow: Results<GoalsTI>?
     var delegateRow = ""
     var pickerRow: Int = 0
+    var changedRow = ""
     var createdRow: HomeTasks? {
         didSet {
 //            showSelectedRow()
@@ -241,7 +243,7 @@ class Goals: UIViewController {
         daysDescription()
 //        loadRows()
         showSelectedRow()
-
+        print("yey \(delegateRow)")
     }
 
 
@@ -271,8 +273,11 @@ class Goals: UIViewController {
 
 
     @IBAction func doneButton(_ sender: UIBarButtonItem) {
-
-        addRow()
+        print("name of the current row will be \(delegateRow)")
+        if pickerValueChanges {
+            addRow()
+        }
+        
         self.navigationController?.popViewController(animated: true)
 
     }
@@ -293,13 +298,13 @@ func loadRows() {
 }
 extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationControllerDelegate {
 
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        (viewController as? AddTask)?.goals = delegateRow
-
-
-//                 realm.add(newRow)
-//        addRow()
-    }
+//    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+//        (viewController as? AddTask)?.goals = delegateRow
+//
+//
+////                 realm.add(newRow)
+////        addRow()
+//    }
 
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -318,9 +323,10 @@ extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationContr
         print(selectedRow)
         delegateRow = selectedRow
         pickerRow = row
+        pickerValueChanges = true
 //        self.delegate.getGoal(text: selectedRow)
 
-        let newRow = GoalsTI()
+     
 //        try! realm.write{
 //                newRow.rowNumber = row
 //            realm.add(newRow)
@@ -347,7 +353,7 @@ extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationContr
                     }
                 }
             } else {
-            if delegateRow != "" {
+            if  changedRow == "" {
                 try! realm.write{
                     let newRow = GoalsTI()
                     newRow.rowDesc = delegateRow
@@ -357,11 +363,12 @@ extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationContr
                 }
             }
 
-
-        print(delegateRow)
+                
+       
     }
         }
-
+        
+        self.delegate.getGoal(text: delegateRow)
 
     }
 

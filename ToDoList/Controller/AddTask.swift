@@ -64,8 +64,8 @@ class AddTask: UITableViewController, tableViewReload {
         tasking().textField?.delegate = self
         self.tableView.rowHeight = 44
         print("current Added tasks \(String(describing: addedTasks))")
-        print("current createdTasks \(String(describing: createdTask))")
-        
+//        print("current createdTasks \(String(describing: createdTask))")
+           print("yey \(goals)")
     }
 //    override func viewWillDisappear(_ animated: Bool) {
 //        if homeTaskName != "" {
@@ -238,25 +238,35 @@ class AddTask: UITableViewController, tableViewReload {
                 if let currentData = addedTasks?[0] {
                     if currentData.goals != ""  {
                         
-                       
+                       //try to change load rows inside AddedTask
                        
                         destinationVC.createdRow = currentCategory
 //                        destinationVC.loadedData1 = true
 //                        destinationVC.delegateRow = currentData.goals
+                        destinationVC.delegateRow = goals
+                        destinationVC.changedRow = goals
                         destinationVC.loadRows()
+                        
 //                        destinationVC.showSelectedRow()
 //                        destin
                     print("try to load goals ti")
                     }
-                    
-                } else {
-                    destinationVC.createdRow = currentCategory
-//                        let homeRow = HomeTasks()
-//                        try! realm.write {
-//                            realm.add(homeRow)
-//                        }
-//                        destinationVC.createdRow = homeRow
-                    }
+                    } else {
+                        destinationVC.createdRow = currentCategory
+                        if destinationVC.createdRow?.goals.first != nil {
+                            destinationVC.loadRows()
+                            print("destination didn't nill")
+                        }
+//                        destinationVC.loadRows()
+                        print("just go to create rows")
+    //                        let homeRow = HomeTasks()
+    //                        try! realm.write {
+    //                            realm.add(homeRow)
+    //                        }
+    //                        destinationVC.createdRow = homeRow
+                        }
+            }
+                }
                 }
             
             
@@ -283,13 +293,13 @@ class AddTask: UITableViewController, tableViewReload {
 
 
 
-            }
+            
 //            destinationVC.createdGoal = addedTasks
             
             
         
         
-    }
+    
     
     //MARK: - Add New Tasks
     @IBAction func addButton(_ sender: UIBarButtonItem) {
