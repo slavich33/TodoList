@@ -22,8 +22,8 @@ class AddTask: UITableViewController, tableViewReload {
     
     
     @IBAction func taskingTextField(_ sender: UITextField) {
-//        tableView.reloadData()
-//        UITextField().text = homeTaskName
+        //        tableView.reloadData()
+        //        UITextField().text = homeTaskName
         print("Tasking reload data working")
     }
     var taskingLabels = tasking()
@@ -37,14 +37,14 @@ class AddTask: UITableViewController, tableViewReload {
     var loaded: Bool = false
     var homeTaskName = ""
     var delegate: tableViewReload!
-     var loadedData = true
+    var loadedData = true
     
     
     override func viewWillAppear(_ animated: Bool) {
         self.tableView.reloadData()
         print("Name of the Tips will be: \(selectedCellIdentifier)")
         print("Name of the homeTask will be: \(homeTaskName)")
-      print("Name of the current goals will be: \(goals)")
+        print("Name of the current goals will be: \(goals)")
     }
     
     var createdTask: HomeTasks? {
@@ -59,43 +59,43 @@ class AddTask: UITableViewController, tableViewReload {
         taskingLabels.tipsLabel?.text = "Hello"
         navigationItem.backBarButtonItem?.isEnabled = false
         setupHideKeyboardOnTap()
-//                        loadTasks()
+        //                        loadTasks()
         //        tableView.reloadData()
         tasking().textField?.delegate = self
         self.tableView.rowHeight = 44
         print("current Added tasks \(String(describing: addedTasks))")
-//        print("current createdTasks \(String(describing: createdTask))")
-           print("yey \(goals)")
+        //        print("current createdTasks \(String(describing: createdTask))")
+        print("yey \(goals)")
     }
-//    override func viewWillDisappear(_ animated: Bool) {
-//        if homeTaskName != "" {
-//
-//            self.delegate.reload()
-//            print("Holla")
-//        }
-//    }
+    //    override func viewWillDisappear(_ animated: Bool) {
+    //        if homeTaskName != "" {
+    //
+    //            self.delegate.reload()
+    //            print("Holla")
+    //        }
+    //    }
     override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(true)
-//        print("View Dissapeared")
-//        print("Current textField name is: \(homeTaskName) & \(tasking().textField?.text )")
-
-//        if ((navigationController?.popToRootViewController(animated: true)) != nil) {
-//            if homeTaskName != "" {
-//
-//                self.delegate.reload()
-//                print("Goes to parent root controller")
-//            }
-//        }
-
-//            if homeTaskName != "" {
-//
-//                self.delegate.reload()
-//                print("Holla")
-//            }
+        //        super.viewDidDisappear(true)
+        //        print("View Dissapeared")
+        //        print("Current textField name is: \(homeTaskName) & \(tasking().textField?.text )")
+        
+        //        if ((navigationController?.popToRootViewController(animated: true)) != nil) {
+        //            if homeTaskName != "" {
+        //
+        //                self.delegate.reload()
+        //                print("Goes to parent root controller")
+        //            }
+        //        }
+        
+        //            if homeTaskName != "" {
+        //
+        //                self.delegate.reload()
+        //                print("Holla")
+        //            }
     }
     
     
-   
+    
     
     
     //MARK: - TableVIew Data source Methods
@@ -119,26 +119,26 @@ class AddTask: UITableViewController, tableViewReload {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tasking") as! tasking
             
-//            if let task = addedTasks?[indexPath.row] {
-//                cell.textField.text = task.name
-//            }
-//            else {
+            //            if let task = addedTasks?[indexPath.row] {
+            //                cell.textField.text = task.name
+            //            }
+            //            else {
             
             
-//            textFieldDidBeginEditing(cell.textField)
+            //            textFieldDidBeginEditing(cell.textField)
             
             textFieldDidEndEditing(cell.textField)
             cell.textField.delegate = self
-//            }
-//            if let currentTask = addedTasks?[0] {
-//                cell.textField.text = currentTask.name
-//                textFieldDidEndEditing(cell.textField)
-//                cell.textField.delegate = self
-//            }
-//            cell.delegate = self
-//            cell.textField.text = homeTaskName
+            //            }
+            //            if let currentTask = addedTasks?[0] {
+            //                cell.textField.text = currentTask.name
+            //                textFieldDidEndEditing(cell.textField)
+            //                cell.textField.delegate = self
+            //            }
+            //            cell.delegate = self
+            //            cell.textField.text = homeTaskName
             
-
+            
             //            task.name = (cell.textLabel?.text) ?? "def"
             //            save(tasks: task)
             //            homeTaskName = cell.textField.text!
@@ -186,7 +186,7 @@ class AddTask: UITableViewController, tableViewReload {
         } else if indexPath.row == 2 {
             self.performSegue(withIdentifier: segues.goToReminderTime, sender: indexPath)
         } else if indexPath.row == 3 {
-           
+            
             self.performSegue(withIdentifier: segues.goToGoal, sender: indexPath)
         }
         
@@ -231,74 +231,74 @@ class AddTask: UITableViewController, tableViewReload {
             let destinationVC = segue.destination as! Goals
             
             destinationVC.delegate = self
-//            destinationVC.reloadDelegate = self
+            //            destinationVC.reloadDelegate = self
             
             if let currentCategory = createdTask {
-            
+                
                 if let currentData = addedTasks?[0] {
                     if currentData.goals != ""  {
                         
-                       //try to change load rows inside AddedTask
-                       
+                        //try to change load rows inside AddedTask
+                        
                         destinationVC.createdRow = currentCategory
-//                        destinationVC.loadedData1 = true
-//                        destinationVC.delegateRow = currentData.goals
+                        //                        destinationVC.loadedData1 = true
+                        //                        destinationVC.delegateRow = currentData.goals
                         destinationVC.delegateRow = goals
                         destinationVC.changedRow = goals
                         destinationVC.loadRows()
                         
-//                        destinationVC.showSelectedRow()
-//                        destin
-                    print("try to load goals ti")
+                        //                        destinationVC.showSelectedRow()
+                        //                        destin
+                        print("try to load goals ti")
                     }
-                    } else {
-                        destinationVC.createdRow = currentCategory
-                        if destinationVC.createdRow?.goals.first != nil {
-                            destinationVC.loadRows()
-                            print("destination didn't nill")
-                        }
-//                        destinationVC.loadRows()
-                        print("just go to create rows")
-    //                        let homeRow = HomeTasks()
-    //                        try! realm.write {
-    //                            realm.add(homeRow)
-    //                        }
-    //                        destinationVC.createdRow = homeRow
-                        }
+                } else {
+                    destinationVC.createdRow = currentCategory
+                    if destinationVC.createdRow?.goals.first != nil {
+                        destinationVC.loadRows()
+                        print("destination didn't nill")
+                    }
+                    //                        destinationVC.loadRows()
+                    print("just go to create rows")
+                    //                        let homeRow = HomeTasks()
+                    //                        try! realm.write {
+                    //                            realm.add(homeRow)
+                    //                        }
+                    //                        destinationVC.createdRow = homeRow
+                }
             }
-                }
-                }
-            
-            
-//            for goal in addedTasks! {
-//            if let indexPath = tableView.indexPathForSelectedRow {
-////                                                        try! realm.write{
-////                                destination.createdTask?.name = task.name}
-//
-//
-////                destinationVC.createdGoal = addedTasks?[indexPath.row]
-//                destinationVC.loadRows()
-////                destinationVC.createdGoal?.goals = (addedTasks?[indexPath.row].goals)!
-////                destinationVC.loadRows()
-//                print("Perform segue with selected row, and load i guess")
-//            }
-//                if goal.goals != ""{
-//                    if goal.goals != "Unlimited" {
-//                        destinationVC.createdGoal = goal
-//                    }
-//                }
-//                
-//        }
-//            try to make it work
-
-
-
-            
-//            destinationVC.createdGoal = addedTasks
-            
-            
-        
-        
+        }
+    }
+    
+    
+    //            for goal in addedTasks! {
+    //            if let indexPath = tableView.indexPathForSelectedRow {
+    ////                                                        try! realm.write{
+    ////                                destination.createdTask?.name = task.name}
+    //
+    //
+    ////                destinationVC.createdGoal = addedTasks?[indexPath.row]
+    //                destinationVC.loadRows()
+    ////                destinationVC.createdGoal?.goals = (addedTasks?[indexPath.row].goals)!
+    ////                destinationVC.loadRows()
+    //                print("Perform segue with selected row, and load i guess")
+    //            }
+    //                if goal.goals != ""{
+    //                    if goal.goals != "Unlimited" {
+    //                        destinationVC.createdGoal = goal
+    //                    }
+    //                }
+    //
+    //        }
+    //            try to make it work
+    
+    
+    
+    
+    //            destinationVC.createdGoal = addedTasks
+    
+    
+    
+    
     
     
     //MARK: - Add New Tasks
@@ -313,54 +313,54 @@ class AddTask: UITableViewController, tableViewReload {
                 if currentData.name != "" {
                     do {
                         try self.realm.write {
-//                            let newTask = AddedTasks()
-//                            newTask.name = homeTaskName
-//                            print(homeTaskName)
-//                            currentCategory.tasks.append(newTask)
+                            //                            let newTask = AddedTasks()
+                            //                            newTask.name = homeTaskName
+                            //                            print(homeTaskName)
+                            //                            currentCategory.tasks.append(newTask)
                             currentCategory.name = homeTaskName
                             currentData.name = homeTaskName
-//                            if let currentGoal =
+                            //                            if let currentGoal =
                             currentData.goals = goals
-//                            currentCategory.name = currentData.name
+                            //                            currentCategory.name = currentData.name
                         }
                     } catch  {
                         print("Error saving message \(error) ")
                     }
                 }
-                  // Try to make code here
+                // Try to make code here
             } else {
-     
-                    if homeTaskName != "" {
-                        print(createdTask!)
-                        do {
-                            try self.realm.write {
-                                print("Trying to create addedTask")
-                                let newTask = AddedTasks()
-//                                let newGoal = GoalsTI()
-                                newTask.name = homeTaskName
-                                newTask.goals = goals
-//                                newGoal.rowNumber = Int(goals) ?? 0
-                                print(homeTaskName)
-                                currentCategory.tasks.append(newTask)
-//                                currentCategory.goals.append(newGoal)
-                                currentCategory.name = homeTaskName
-                                
-                            }
-                        } catch  {
-                            print("Error saving message \(error) ")
+                
+                if homeTaskName != "" {
+                    print(createdTask!)
+                    do {
+                        try self.realm.write {
+                            print("Trying to create addedTask")
+                            let newTask = AddedTasks()
+                            //                                let newGoal = GoalsTI()
+                            newTask.name = homeTaskName
+                            newTask.goals = goals
+                            //                                newGoal.rowNumber = Int(goals) ?? 0
+                            print(homeTaskName)
+                            currentCategory.tasks.append(newTask)
+                            //                                currentCategory.goals.append(newGoal)
+                            currentCategory.name = homeTaskName
+                            
                         }
-
+                    } catch  {
+                        print("Error saving message \(error) ")
                     }
                     
                 }
+                
+            }
         }
-    
-        self.delegate.reload()
-     
-                             dismiss(animated: true)
         
-      
-//        }
+        self.delegate.reload()
+        
+        dismiss(animated: true)
+        
+        
+        //        }
     }
     //MARK: - data manipulation methods
     
@@ -382,11 +382,11 @@ class AddTask: UITableViewController, tableViewReload {
     
     func loadTasks() {
         
-//        let newTask = AddedTasks()
-//        save(tasks: newTask)
-//        addedTasks = createdTask?.tasks.sorted(byKeyPath: "name", ascending: true)
+        //        let newTask = AddedTasks()
+        //        save(tasks: newTask)
+        //        addedTasks = createdTask?.tasks.sorted(byKeyPath: "name", ascending: true)
         print("current \(String(describing: addedTasks))")
-//        self.tableView.reloadData()
+        //        self.tableView.reloadData()
         
     }
     
@@ -406,76 +406,76 @@ extension AddTask: ChildViewControllerDelegate, RemindBDProtocol, ReminderTimePr
         print("changed")
         return true
     }
-//
-//    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-//        if textField.text != "" {
-//
-//            return true
-//        } else {
-//            textField.placeholder = "Type something"
-//
-//            return false
-//
-//        }
-//
-//    }
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//
-//        textField.endEditing(true)
-//        return true
-//    }
+    //
+    //    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+    //        if textField.text != "" {
+    //
+    //            return true
+    //        } else {
+    //            textField.placeholder = "Type something"
+    //
+    //            return false
+    //
+    //        }
+    //
+    //    }
+    //    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    //
+    //        textField.endEditing(true)
+    //        return true
+    //    }
     
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        reloadTable()
-//    }
-//    let editingChanged = UIAction { _ in
-//        // Do something when text changes...
-//    }
-//    myTextField.addAction(editingChanged, for: .editingChanged)
+    //    func textFieldDidBeginEditing(_ textField: UITextField) {
+    //        reloadTable()
+    //    }
+    //    let editingChanged = UIAction { _ in
+    //        // Do something when text changes...
+    //    }
+    //    myTextField.addAction(editingChanged, for: .editingChanged)
     @objc func textFieldDidChange() {
         tableView.reloadData()
     }
     
-//    func textChanged () {
-//        if let currentData = addedTasks?[0] {
-//            if currentData.name != "" {
-//                AddTask.loadedData = true
-//                print("AddTask.loadedData chaned to true")
-//                print(AddTask.loadedData)
-//            } else {
-//                AddTask.loadedData = false
-//                print("AddTask.loadedData chaned to false")
-//                print(AddTask.loadedData)
-//            }
-//        }
-//    }
+    //    func textChanged () {
+    //        if let currentData = addedTasks?[0] {
+    //            if currentData.name != "" {
+    //                AddTask.loadedData = true
+    //                print("AddTask.loadedData chaned to true")
+    //                print(AddTask.loadedData)
+    //            } else {
+    //                AddTask.loadedData = false
+    //                print("AddTask.loadedData chaned to false")
+    //                print(AddTask.loadedData)
+    //            }
+    //        }
+    //    }
     func textFieldDidEndEditing(_ textField: UITextField) {
         let text = selectedCellIdentifier
-    
+        
         if cellTips().cellArray.contains(text) {
             textField.text = text
-
+            
         } else if loadedData {
             
             textField.text = addedTasks?[0].name
             loadedData = false
-      
+            
         } else {
             textField.text = textField.text
-
+            
         }
         homeTaskName = textField.text!
         selectedCellIdentifier = ""
         print("Hi textFieldDidEndEditing delegate")
         print("\(selectedCellIdentifier) & \(homeTaskName) & \(textField.text!)")
         
-//        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        //        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-//        print(homeTaskName)
-
-//        if textField.isEditing {
-//                    tableView.reloadData()
-//                }
+        //        print(homeTaskName)
+        
+        //        if textField.isEditing {
+        //                    tableView.reloadData()
+        //                }
     }
     
     func textTips(string: String) {

@@ -69,14 +69,41 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
             print("Reloaded")
         self.tableView.reloadData()
         for home in homeArray! {
+            
             if home.name == "" {
                 try! realm.write {
+//                    realm.delete(home, cascading: true)
+                    realm.delete(home.goals)
                     realm.delete(home)
                     self.tableView.reloadData()
                     print("Deleted")
                 }
             }
+            
+            for task in home.tasks {
+                for goal in home.goals {
+                    if goal.rowDesc != task.goals {
+                        try! realm.write {
+                            goal.rowDesc = task.goals
+//                            if goal.rowDesc != "Unlimited"{
+                            if Int(task.goals.prefix(2)) ?? 0 > 10 {
+                                goal.rowNumber = Int(task.goals.prefix(2)) ?? 0
+                            } else {
+                                goal.rowNumber = Int(task.goals.prefix(1)) ?? 0
+                            }
+                                
+//                            }
+//                                if goal.rowDesc == "Unlimited" {
+//                                goal.rowNumber = 0
+//                            }
+                        }
+                    }
+                }
+            }
         }
+//        for goal in Goals().selRow! {
+//
+//        }
         
     }
 
@@ -169,6 +196,9 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
 //                                destination.createdTask?.name = task.name}
                         destination.createdTask = homeArray?[indexPath.row]
                             destination.loadName()
+//                            if task.goals != nil {
+//                                destination.goals = ta
+//                            }
 //                            destination.goals = destination.addedTasks.
 //                            destination.goals = task.
                             print("Perform segue with selected row, and load i guess")

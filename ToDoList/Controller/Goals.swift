@@ -206,20 +206,20 @@ import UIKit
 import RealmSwift
 
 protocol GoalProtocol {
-
+    
     func getGoal(text: String)
-
+    
 }
 
 class Goals: UIViewController {
-
+    
     @IBOutlet var daysPicker: UIPickerView!
-
+    
     var days: [String] = []
-
+    
     public var delegate: GoalProtocol!
     var pickerValueChanges = false
-
+    
     let realm = try! Realm()
     var selRow: Results<GoalsTI>?
     var delegateRow = ""
@@ -227,51 +227,51 @@ class Goals: UIViewController {
     var changedRow = ""
     var createdRow: HomeTasks? {
         didSet {
-//            showSelectedRow()
-//            loadRows()
+            //            showSelectedRow()
+            //            loadRows()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         print(createdRow)
         navigationController?.delegate = self
         daysPicker.dataSource = self
         daysPicker.delegate = self
-
+        
         daysDescription()
-//        loadRows()
+        //        loadRows()
         showSelectedRow()
         print("yey \(delegateRow)")
     }
-
-
-
+    
+    
+    
     func daysDescription() {
-
+        
         days.append("Unlimited")
-
+        
         for eachDay in [1] {
             days.append(eachDay.description + " day")
         }
-
+        
         for day in 2...365 {
             days.append(day.description + " days")
         }
-
+        
     }
-
+    
     func showSelectedRow() {
-
+        
         guard let selectedRow = realm.objects(GoalsTI.self).first else {return}
         let row = selectedRow.rowNumber
         daysPicker.selectRow(pickerRow, inComponent: 0, animated: true)
         print(row)
-
+        
     }
-
-
+    
+    
     @IBAction func doneButton(_ sender: UIBarButtonItem) {
         print("name of the current row will be \(delegateRow)")
         if pickerValueChanges {
@@ -279,97 +279,102 @@ class Goals: UIViewController {
         }
         
         self.navigationController?.popViewController(animated: true)
-
+        
     }
-
-func loadRows() {
-
-      selRow = createdRow?.goals.sorted(byKeyPath: "rowDesc", ascending: true)
-    for row in selRow! {
-//        daysPicker.selectRow(row.rowNumber, inComponent: 0, animated: true)
-        pickerRow = row.rowNumber
-        print(pickerRow)
-
-    }
-//    selRow = realm.objects(GoalsTI.self)
-
+    
+    func loadRows() {
+        
+        selRow = createdRow?.goals.sorted(byKeyPath: "rowDesc", ascending: true)
+        for row in selRow! {
+            //        daysPicker.selectRow(row.rowNumber, inComponent: 0, animated: true)
+            pickerRow = row.rowNumber
+            print(pickerRow)
+            
+        }
+        //    selRow = realm.objects(GoalsTI.self)
+        
     }
     
 }
 extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationControllerDelegate {
-
-//    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-//        (viewController as? AddTask)?.goals = delegateRow
-//
-//
-////                 realm.add(newRow)
-////        addRow()
-//    }
-
+    
+    //    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+    //        (viewController as? AddTask)?.goals = delegateRow
+    //
+    //
+    ////                 realm.add(newRow)
+    ////        addRow()
+    //    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         days.count
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return days[row]
     }
-
+    
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedRow = days[row].description
         print(selectedRow)
         delegateRow = selectedRow
         pickerRow = row
         pickerValueChanges = true
-//        self.delegate.getGoal(text: selectedRow)
-
-     
-//        try! realm.write{
-//                newRow.rowNumber = row
-//            realm.add(newRow)
-//            if let currentCategory = createdRow {
-//                currentCategory.goals.append(newRow)
-//            }
-//            }
+        //        self.delegate.getGoal(text: selectedRow)
+        
+        
+        //        try! realm.write{
+        //                newRow.rowNumber = row
+        //            realm.add(newRow)
+        //            if let currentCategory = createdRow {
+        //                currentCategory.goals.append(newRow)
+        //            }
+        //            }
     }
-
+    
     func addRow() {
-
+        
         if let currentCategory = createdRow {
             if let currentData = selRow?[0] {
                 if currentData.rowDesc != "" {
                     do {
                         try self.realm.write {
-
-
+                            
+                            
                             currentData.rowDesc = delegateRow
                             currentData.rowNumber = pickerRow
+                           
+//                            for task in currentCategory.tasks {
+//                                task.goals = delegateRow
+//                            }
+                            
                         }
                     } catch  {
                         print("Error saving message \(error) ")
                     }
                 }
             } else {
-            if  changedRow == "" {
-                try! realm.write{
-                    let newRow = GoalsTI()
-                    newRow.rowDesc = delegateRow
-                    newRow.rowNumber = pickerRow
-                    currentCategory.goals.append(newRow)
-                    realm.add(newRow)
+                if  changedRow == "" {
+                    try! realm.write{
+                        let newRow = GoalsTI()
+                        newRow.rowDesc = delegateRow
+                        newRow.rowNumber = pickerRow
+                        currentCategory.goals.append(newRow)
+                        realm.add(newRow)
+                    }
                 }
-            }
-
                 
-       
-    }
+                
+                
+            }
         }
         
         self.delegate.getGoal(text: delegateRow)
-
+        
     }
-
+    
 }
