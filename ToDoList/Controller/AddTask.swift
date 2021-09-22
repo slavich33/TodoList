@@ -239,8 +239,19 @@ class AddTask: UITableViewController, tableViewReload {
                     if currentData.goals != ""  {
                         
                         //try to change load rows inside AddedTask
-                        
+//                        this is error with loading rows
                         destinationVC.createdRow = currentCategory
+//                        for goal in currentCategory.goals {
+//                            if destinationVC.selRow == nil {
+//                                try! realm.write {
+//                                    let newGoal = GoalsTI()
+//                                    newGoal.rowDesc = goals
+//                                    realm.add(newGoal)
+//                                    print("create goals in goal")
+//                                }
+//                            }
+//                        }
+                       
                         //                        destinationVC.loadedData1 = true
                         //                        destinationVC.delegateRow = currentData.goals
                         destinationVC.delegateRow = goals
@@ -258,6 +269,7 @@ class AddTask: UITableViewController, tableViewReload {
                         print("destination didn't nill")
                     }
                     //                        destinationVC.loadRows()
+//                    destinationVC.createdRow = currentCategory
                     print("just go to create rows")
                     //                        let homeRow = HomeTasks()
                     //                        try! realm.write {
@@ -336,13 +348,13 @@ class AddTask: UITableViewController, tableViewReload {
                         try self.realm.write {
                             print("Trying to create addedTask")
                             let newTask = AddedTasks()
-                            //                                let newGoal = GoalsTI()
+                            let newGoal = GoalsTI()
                             newTask.name = homeTaskName
                             newTask.goals = goals
-                            //                                newGoal.rowNumber = Int(goals) ?? 0
+                            newGoal.rowNumber = Int(goals) ?? 0
                             print(homeTaskName)
                             currentCategory.tasks.append(newTask)
-                            //                                currentCategory.goals.append(newGoal)
+                            currentCategory.goals.append(newGoal)
                             currentCategory.name = homeTaskName
                             
                         }
@@ -353,6 +365,19 @@ class AddTask: UITableViewController, tableViewReload {
                 }
                 
             }
+            
+            
+            if currentCategory.name == "" {
+                for goal in currentCategory.goals {
+                    if goal.rowDesc != "" {
+                        print("Deleting current GoalsTI")
+                        try! self.realm.write {
+                            realm.delete(currentCategory.goals)
+                        }
+                    }
+                }
+                }
+            
         }
         
         self.delegate.reload()

@@ -1,4 +1,4 @@
-![CalendarKit](https://user-images.githubusercontent.com/8013017/115113496-5c26fd00-9f93-11eb-8aa2-1db8807e455f.png)
+![CalendarKit](https://user-images.githubusercontent.com/8013017/133907073-d11b3d15-3ed6-4052-9628-2b93e91710d8.png)
 [![License](https://img.shields.io/github/license/richardtop/calendarkit)](https://swiftpackageindex.com/richardtop/CalendarKit)
 [![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-orange.svg)](https://swiftpackageindex.com/richardtop/CalendarKit) 
 [![Swift Compatibility](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Frichardtop%2FCalendarKit%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/richardtop/CalendarKit)
@@ -7,10 +7,10 @@
 [![Version](https://img.shields.io/cocoapods/v/CalendarKit.svg?style=flat)](https://cocoapods.org/pods/CalendarKit)
 
 # CalendarKit
-**CalendarKit** is a Swift calendar UI library for iOS, iPadOS and Mac Catalyst. It looks similar to the Apple Calendar app out-of-the-box, while allowing customization when needed. CalendarKit is composed of multiple modules which can be used together or independently.
+**CalendarKit** is a Swift calendar UI library for iOS and Mac Catalyst. It looks similar to the Apple Calendar app out-of-the-box, while allowing customization when needed. CalendarKit is composed of multiple modules which can be used together or independently.
 
 ## Tutorials
-[Create iOS Calendar App in Swift with CalendarKit](https://www.youtube.com/watch?v=cvF1D-F_LPw&list=PLqaZLRBv1aCJMLC_DKtzVZv72L0LvBRRA&index=1)
+- [Create iOS Calendar App in Swift with CalendarKit](https://www.youtube.com/watch?v=iC4XxmExqFA)
 
 ## Need Help?
 If you have a **programming question** about how to use CalendarKit in your application, ask it on StackOverflow with the [CalendarKit](https://stackoverflow.com/questions/tagged/calendarkit) tag. Check out the [Sample App](https://github.com/richardtop/CalendarApp) for reference.
@@ -120,8 +120,8 @@ dayView.updateStyle(style)
 
 ## Requirements
 
-- iOS 9.0+, iPadOS 13.0+, macOS 10.15+
-- Swift 4+ (Library is written in Swift 5.4)
+- iOS 9.0+, macOS (Catalyst) 10.15+
+- Swift 4+ (Library is written in Swift 5)
 
 ## Contributing
 The list of features currently in development can be viewed on the [issues](https://github.com/richardtop/CalendarKit/issues) page.

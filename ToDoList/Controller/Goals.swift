@@ -235,7 +235,7 @@ class Goals: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(createdRow)
+        print(createdRow as Any)
         navigationController?.delegate = self
         daysPicker.dataSource = self
         daysPicker.delegate = self
@@ -344,7 +344,7 @@ extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationContr
                     do {
                         try self.realm.write {
                             
-                            
+                            print("rewrite current goal")
                             currentData.rowDesc = delegateRow
                             currentData.rowNumber = pickerRow
                            
@@ -365,6 +365,7 @@ extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationContr
                         newRow.rowNumber = pickerRow
                         currentCategory.goals.append(newRow)
                         realm.add(newRow)
+                        print("create current goal and append to goals")
                     }
                 }
                 

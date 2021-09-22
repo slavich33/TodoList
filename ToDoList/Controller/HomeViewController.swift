@@ -42,6 +42,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         print("View appeared")
 //        reload()
         print(tappedOnTheCell)
+//        print(realm.configuration.fileURL)
     }
     
     override func viewDidLoad() {
@@ -70,16 +71,6 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.reloadData()
         for home in homeArray! {
             
-            if home.name == "" {
-                try! realm.write {
-//                    realm.delete(home, cascading: true)
-                    realm.delete(home.goals)
-                    realm.delete(home)
-                    self.tableView.reloadData()
-                    print("Deleted")
-                }
-            }
-            
             for task in home.tasks {
                 for goal in home.goals {
                     if goal.rowDesc != task.goals {
@@ -91,18 +82,28 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                             } else {
                                 goal.rowNumber = Int(task.goals.prefix(1)) ?? 0
                             }
-                                
-//                            }
-//                                if goal.rowDesc == "Unlimited" {
-//                                goal.rowNumber = 0
-//                            }
+
                         }
                     }
                 }
             }
+            
+            if home.name == "" {
+                try! realm.write {
+//                    realm.delete(home, cascading: true)
+                    realm.delete(home.goals)
+                    realm.delete(home)
+                    
+                    self.tableView.reloadData()
+                    print("Deleted")
+                }
+            }
+            
+            //Validation for goals which were changed without saving AddedTasks
+            
         }
 //        for goal in Goals().selRow! {
-//
+ self.tableView.reloadData()
 //        }
         
     }
