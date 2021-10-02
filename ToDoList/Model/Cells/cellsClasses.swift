@@ -8,8 +8,9 @@
 import Foundation
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
-class homeCell: UITableViewCell {
+class homeCell: SwipeTableViewCell {
     
     
     @IBOutlet var homeLabel: UILabel!

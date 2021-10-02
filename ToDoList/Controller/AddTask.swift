@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealmSwift
+import SwipeCellKit
 
 protocol tableViewReload {
     func reload()
@@ -64,39 +65,8 @@ class AddTask: UITableViewController, tableViewReload {
         tasking().textField?.delegate = self
         self.tableView.rowHeight = 44
         print("current Added tasks \(String(describing: addedTasks))")
-        //        print("current createdTasks \(String(describing: createdTask))")
         print("yey \(goals)")
     }
-    //    override func viewWillDisappear(_ animated: Bool) {
-    //        if homeTaskName != "" {
-    //
-    //            self.delegate.reload()
-    //            print("Holla")
-    //        }
-    //    }
-    override func viewDidDisappear(_ animated: Bool) {
-        //        super.viewDidDisappear(true)
-        //        print("View Dissapeared")
-        //        print("Current textField name is: \(homeTaskName) & \(tasking().textField?.text )")
-        
-        //        if ((navigationController?.popToRootViewController(animated: true)) != nil) {
-        //            if homeTaskName != "" {
-        //
-        //                self.delegate.reload()
-        //                print("Goes to parent root controller")
-        //            }
-        //        }
-        
-        //            if homeTaskName != "" {
-        //
-        //                self.delegate.reload()
-        //                print("Holla")
-        //            }
-    }
-    
-    
-    
-    
     
     //MARK: - TableVIew Data source Methods
     
@@ -118,30 +88,10 @@ class AddTask: UITableViewController, tableViewReload {
         
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "tasking") as! tasking
-            
-            //            if let task = addedTasks?[indexPath.row] {
-            //                cell.textField.text = task.name
-            //            }
-            //            else {
-            
-            
-            //            textFieldDidBeginEditing(cell.textField)
-            
+
             textFieldDidEndEditing(cell.textField)
             cell.textField.delegate = self
-            //            }
-            //            if let currentTask = addedTasks?[0] {
-            //                cell.textField.text = currentTask.name
-            //                textFieldDidEndEditing(cell.textField)
-            //                cell.textField.delegate = self
-            //            }
-            //            cell.delegate = self
-            //            cell.textField.text = homeTaskName
-            
-            
-            //            task.name = (cell.textLabel?.text) ?? "def"
-            //            save(tasks: task)
-            //            homeTaskName = cell.textField.text!
+
             
             return cell
             
@@ -231,45 +181,36 @@ class AddTask: UITableViewController, tableViewReload {
             let destinationVC = segue.destination as! Goals
             
             destinationVC.delegate = self
-            //            destinationVC.reloadDelegate = self
             
             if let currentCategory = createdTask {
+                
+                destinationVC.createdRow = currentCategory
                 
                 if let currentData = addedTasks?[0] {
                     if currentData.goals != ""  {
                         
                         //try to change load rows inside AddedTask
-//                        this is error with loading rows
-                        destinationVC.createdRow = currentCategory
-//                        for goal in currentCategory.goals {
-//                            if destinationVC.selRow == nil {
-//                                try! realm.write {
-//                                    let newGoal = GoalsTI()
-//                                    newGoal.rowDesc = goals
-//                                    realm.add(newGoal)
-//                                    print("create goals in goal")
-//                                }
-//                            }
-//                        }
-                       
-                        //                        destinationVC.loadedData1 = true
-                        //                        destinationVC.delegateRow = currentData.goals
-                        destinationVC.delegateRow = goals
-                        destinationVC.changedRow = goals
-                        destinationVC.loadRows()
+                        //                        this is error with loading rows
                         
-                        //                        destinationVC.showSelectedRow()
-                        //                        destin
+                        
+                        destinationVC.delegateRow = goals
+                        
+                        if destinationVC.createdRow?.goals.first != nil {
+                            destinationVC.changedRow = goals
+                            destinationVC.loadRows()
+                            print("destination didn't nill")
+                        }
+                        
                         print("try to load goals ti")
                     }
                 } else {
-                    destinationVC.createdRow = currentCategory
+                    
                     if destinationVC.createdRow?.goals.first != nil {
                         destinationVC.loadRows()
                         print("destination didn't nill")
                     }
                     //                        destinationVC.loadRows()
-//                    destinationVC.createdRow = currentCategory
+                    //                    destinationVC.createdRow = currentCategory
                     print("just go to create rows")
                     //                        let homeRow = HomeTasks()
                     //                        try! realm.write {
@@ -354,7 +295,20 @@ class AddTask: UITableViewController, tableViewReload {
                             newGoal.rowNumber = Int(goals) ?? 0
                             print(homeTaskName)
                             currentCategory.tasks.append(newTask)
-                            currentCategory.goals.append(newGoal)
+                            
+                            let predicate = NSPredicate(format: "goals.@count > 0")
+                            let filteredRes = realm.objects(HomeTasks.self).filter(predicate)
+                            if filteredRes.count <= 0 {
+                                print("performing created object in goalsTI")
+                                currentCategory.goals.append(newGoal)
+                            }
+                            else {
+                                print("GolasTI were added before")
+                            }
+                            
+                            
+                            
+                            
                             currentCategory.name = homeTaskName
                             
                         }
@@ -376,7 +330,7 @@ class AddTask: UITableViewController, tableViewReload {
                         }
                     }
                 }
-                }
+            }
             
         }
         
@@ -425,6 +379,7 @@ class AddTask: UITableViewController, tableViewReload {
 
 //MARK: - Extension
 extension AddTask: ChildViewControllerDelegate, RemindBDProtocol, ReminderTimeProtocol, GoalProtocol,  UITextFieldDelegate {
+    
     
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

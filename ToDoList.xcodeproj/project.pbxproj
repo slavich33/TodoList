@@ -40,7 +40,7 @@
 		7481AEFBD5FB50EB9B159DE9 /* Pods-ToDoList.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDoList.debug.xcconfig"; path = "Target Support Files/Pods-ToDoList/Pods-ToDoList.debug.xcconfig"; sourceTree = "<group>"; };
 		9DED3B0FAED165FA6F5896DD /* Pods_ToDoList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ToDoList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F92F563B266D646900A5FD1E /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
-		F92F563D266D694400A5FD1E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		F92F563D266D694400A5FD1E /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = HomeViewController.swift; path = ../HomeViewController.swift; sourceTree = "<group>"; };
 		F92F563F266EB73500A5FD1E /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		F92F5641266EB76B00A5FD1E /* UsedDates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsedDates.swift; sourceTree = "<group>"; };
 		F931541626939A3F000A4157 /* HomeTasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTasks.swift; sourceTree = "<group>"; };
@@ -100,6 +100,7 @@
 		F931541E269E299E000A4157 /* Bottom menu */ = {
 			isa = PBXGroup;
 			children = (
+				F92F563D266D694400A5FD1E /* HomeViewController.swift */,
 				F93BF1BD267D329300373000 /* CalendarViewController.swift */,
 				F93BF1BF267D329D00373000 /* StatsViewController.swift */,
 				F93BF1C1267D32A600373000 /* SettingsViewController.swift */,
@@ -192,7 +193,6 @@
 			isa = PBXGroup;
 			children = (
 				F93BF1BC267D326700373000 /* Sign in */,
-				F92F563D266D694400A5FD1E /* HomeViewController.swift */,
 				F9A4FCA0269220DC00AD6B09 /* AddTask.swift */,
 				F931541C269B84C5000A4157 /* TaskTips.swift */,
 				F931542326A8AD2D000A4157 /* RemindByDay.swift */,

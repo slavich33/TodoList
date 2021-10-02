@@ -7,7 +7,7 @@
 
 import UIKit
 import RealmSwift
-
+import SwipeCellKit
 
 let dateReuseIdentifier = "dayCell"
 let startingIndex = 400
@@ -31,18 +31,18 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         scrollToDate(date: Date())
     }
     
-  
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-//        navigationItem.hidesBackButton = true
-      
+        //        navigationItem.hidesBackButton = true
+        
         loadTasks()
         tableView.reloadData()
         print("View appeared")
-//        reload()
+        //        reload()
         print(tappedOnTheCell)
-//        print(realm.configuration.fileURL)
+        print(realm.configuration.fileURL)
     }
     
     override func viewDidLoad() {
@@ -51,12 +51,12 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         loadTasks()
-//        navigationItem.hidesBackButton = true
+        //        navigationItem.hidesBackButton = true
         displayDate(date: Date())
-//        tableView.reloadData()
-       
+        //        tableView.reloadData()
+        
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(false)
         scrollToDate(date: Date())
@@ -66,8 +66,8 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
     
     //MARK: - TableView DataSource Methods
     func reload() {
-       
-            print("Reloaded")
+        
+        print("Reloaded")
         self.tableView.reloadData()
         for home in homeArray! {
             
@@ -76,13 +76,11 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                     if goal.rowDesc != task.goals {
                         try! realm.write {
                             goal.rowDesc = task.goals
-//                            if goal.rowDesc != "Unlimited"{
                             if Int(task.goals.prefix(2)) ?? 0 > 10 {
                                 goal.rowNumber = Int(task.goals.prefix(2)) ?? 0
                             } else {
                                 goal.rowNumber = Int(task.goals.prefix(1)) ?? 0
                             }
-
                         }
                     }
                 }
@@ -90,7 +88,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
             
             if home.name == "" {
                 try! realm.write {
-//                    realm.delete(home, cascading: true)
+                    //                    realm.delete(home, cascading: true)
                     realm.delete(home.goals)
                     realm.delete(home)
                     
@@ -102,12 +100,11 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
             //Validation for goals which were changed without saving AddedTasks
             
         }
-//        for goal in Goals().selRow! {
- self.tableView.reloadData()
-//        }
+        
+        self.tableView.reloadData()
         
     }
-
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return homeArray?.count ?? 1
@@ -115,20 +112,13 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-       
+        
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeCell") as! homeCell
         
-//        let homeName = HomeTasks().tasks
-//        for name in homeName {
-//            cell.homeLabel.text = name.name
-//        
-//        }
-        
-        
-//        let task =
+        cell.delegate = self
         cell.textLabel?.text = homeArray?[indexPath.row].name
-//        cell.homeLabel.text = homeArray?[indexPath.row].name ?? "No Tasks added"
+        //        cell.homeLabel.text = homeArray?[indexPath.row].name ?? "No Tasks added"
         
         
         return cell
@@ -136,15 +126,15 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       
-//        let destination = ViewController.self as! AddTask
-//
-//        if let indexPath = tableView.indexPathForSelectedRow {
-//            destination.selectedCategory = categoryArray?[indexPath.row]
-//        }
-     
+        
+        //        let destination = ViewController.self as! AddTask
+        //
+        //        if let indexPath = tableView.indexPathForSelectedRow {
+        //            destination.selectedCategory = categoryArray?[indexPath.row]
+        //        }
+        
         if homeArray?[indexPath.row].name != "" {
-          
+            
             performSegue(withIdentifier: "createTask", sender: self)
             tappedOnTheCell = true
             print("Selected cell in did row now is \(tappedOnTheCell)")
@@ -154,17 +144,14 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         
     }
     
-  //MARK: - Add New Tasks
+    //MARK: - Add New Tasks
     
     @IBAction func addButton(_ sender: UIButton) {
         
-        
-       
         let newTask = HomeTasks()
         self.save(tasks: newTask)
         
         performSegue(withIdentifier: "createTask", sender: self)
-   
         
     }
     
@@ -177,86 +164,53 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
             let destination = nav.topViewController as! AddTask
             destination.delegate = self
             segue.destination.presentationController?.delegate = self
-//            let destin = nav.topViewController as! Goals
-//          if let task = homeArray {
-//            for name in task {
-//                if name.name == ""{
-//                try! realm.write{
-//                    if let indexPath = tableView.indexPathForSelectedRow {
-//                        destination.createdTask = name
-//                    }
-//                  }
-//            }
-//            }
-//            }
             
-//            if tappedOnTheCell == false {
-                    for task in homeArray!{
-                        if let indexPath = tableView.indexPathForSelectedRow {
-//                                                        try! realm.write{
-//                                destination.createdTask?.name = task.name}
-                        destination.createdTask = homeArray?[indexPath.row]
-                            destination.loadName()
-//                            if task.goals != nil {
-//                                destination.goals = ta
-//                            }
-//                            destination.goals = destination.addedTasks.
-//                            destination.goals = task.
-                            print("Perform segue with selected row, and load i guess")
-                           
-
-                        //try to make it work
-
-
-
-                        }
-//                            if let indexPath = tableView.indexPathForSelectedRow {
-                                if task.name == "" {
-                                    destination.createdTask = task
-//                                    destin.createdRow = task
-                                    print("Perform segue and create goal in Goals")
-                   
-                
-//                            }
-          
-//
-                        }
-                 }
+            for task in homeArray!{
+                if let indexPath = tableView.indexPathForSelectedRow {
+                    
+                    destination.createdTask = homeArray?[indexPath.row]
+                    destination.loadName()
+                    //                            if task.goals != nil {
+                    //                                destination.goals = ta
+                    //                            }
+                    //                            destination.goals = destination.addedTasks.
+                    //                            destination.goals = task.
+                    print("Perform segue with selected row, and load i guess")
+                    
                 }
-             
-//                        if homeArray?.name != "" {
-//                            destination.createdTask = homeArray?[indexPath.row]
-//                            print("Perform segue with selected row, and load i guess")
-//                            print( "selected cell in add button now is \(tappedOnTheCell)")
-//                        }
-            
+                //                            if let indexPath = tableView.indexPathForSelectedRow {
+                if task.name == "" {
+                    destination.createdTask = task
+                    //                                    destin.createdRow = task
+                    print("Perform segue and create goal in Goals")
+                    
+                }
             }
-        
-        
+        }
+    }
     
-
     public func presentationControllerDidDismiss(
-       _ presentationController: UIPresentationController)
-     {
-       // Only called when the sheet is dismissed by DRAGGING.
-       // You'll need something extra if you call .dismiss() on the child.
-       // (I found that overriding dismiss in the child and calling
-       // presentationController.delegate?.presentationControllerDidDismiss
-       // works well).
+        _ presentationController: UIPresentationController)
+    {
+        // Only called when the sheet is dismissed by DRAGGING.
+        // You'll need something extra if you call .dismiss() on the child.
+        // (I found that overriding dismiss in the child and calling
+        // presentationController.delegate?.presentationControllerDidDismiss
+        // works well).
         reload()
         print("Child was dismissed")
-     }
-   
+    }
     
-
-//MARK: - Data Manipulation Methods
-
-func loadTasks() {
     
-    homeArray = realm.objects(HomeTasks.self)
-           
-    self.tableView.reloadData()
-}
+    
+    //MARK: - Data Manipulation Methods
+    
+    func loadTasks() {
+        
+        homeArray = realm.objects(HomeTasks.self)
+        
+        self.tableView.reloadData()
+    }
     
     func save(tasks: HomeTasks) {
         
@@ -273,12 +227,52 @@ func loadTasks() {
         
         self.tableView.reloadData()
     }
-
+    
+    func deleteModel(at indexPath: IndexPath) {
+        
+        if let modelsForDeletion = self.homeArray?[indexPath.row] {
+            do {
+                try self.realm.write{
+                    
+                    self.realm.delete(modelsForDeletion.goals)
+                    self.realm.delete(modelsForDeletion.tasks)
+                    self.realm.delete(modelsForDeletion)
+                    
+                }
+            } catch {
+                print("Error deleting category \(error) ")
+            }
+            
+        }
+        
+    }
+    
 }
     
     
     //MARK: - CollectionViews Calendar code
-    extension HomeViewController:  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    extension HomeViewController:  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,  SwipeTableViewCellDelegate {
+        
+        func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+            guard orientation == .right else {return nil}
+            
+            let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+                print("Deleted")
+                self.deleteModel(at: indexPath)
+            }
+           
+            // customize the action appearance
+            deleteAction.image = UIImage(named: "delete")
+
+           return [deleteAction]
+            
+        }
+        
+        func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+            var options = SwipeOptions()
+            options.expansionStyle = .destructive(automaticallyDelete: true)
+            return options
+        }
         
     
     func selectCell(cell: DateCollectionViewCell) {

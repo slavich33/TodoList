@@ -368,9 +368,6 @@ extension Goals: UIPickerViewDataSource, UIPickerViewDelegate, UINavigationContr
                         print("create current goal and append to goals")
                     }
                 }
-                
-                
-                
             }
         }
         

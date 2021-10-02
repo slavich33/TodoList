@@ -10,5 +10,6 @@ target 'ToDoList' do
   pod 'CalendarKit'
   pod 'Charts'
   pod 'RealmSwift'
-
+  pod 'SwipeCellKit'
+  
 end
