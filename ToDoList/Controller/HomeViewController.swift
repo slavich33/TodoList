@@ -236,6 +236,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                     
                     self.realm.delete(modelsForDeletion.goals)
                     self.realm.delete(modelsForDeletion.tasks)
+                    self.realm.delete(modelsForDeletion.remBD)
                     self.realm.delete(modelsForDeletion)
                     
                 }

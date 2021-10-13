@@ -166,9 +166,82 @@ class AddTask: UITableViewController, tableViewReload {
             
         } else if segue.identifier == segues.goToRemindByDay {
             
-            let destinationVC = segue.destination as! RemindBD
+            var destinationVC = segue.destination as! RemindBD
             
             destinationVC.delegate = self
+         
+            if let currentCategory = createdTask {
+                
+                destinationVC.createdRemBD = currentCategory
+//                destinationVC.calledOnce()
+                if let currentData = addedTasks?[0] {
+                    if currentData.goals != ""  {
+                        
+                        //try to change load rows inside AddedTask
+                        //                        this is error with loading rows
+                        
+                        
+//                        destinationVC.delegateRow = goals
+                        
+                        if destinationVC.createdRemBD?.remBD.first != nil {
+                            destinationVC.loadDay()
+//                            if let indexPath = tableView.indexPathForSelectedRow {
+//                                for cr in currentCategory.remBD {
+//                                    let dici = RemDict(number: cr.number, day: cr.day, isSelected: cr.isSelected)
+//                                    destinationVC.dict = [dici]
+////                                    destinationVC.dict[indexPath.row].number = cr.uniqueKey
+////                                     destinationVC.dict[indexPath.row].isSelected = cr.done
+////                                     destinationVC.dict[indexPath.row].day = cr.name
+//                                }
+//                            destinationVC.loadDay()
+                            
+                                
+                                
+//                                for cr in currentCategory.remBD {
+//                                    do {
+//                                    try realm.write {
+//                                        rem.done = cr.done
+//                                    }
+//                                    } catch {
+//                                        print(error)
+//                                    }
+//                                }
+                            
+                    }
+//                            destinationVC.loadDay()
+//                            destinationVC.saveDay()
+//                            destinationVC.cells?.first?.done = ((currentCategory.remBD.first?.done) != nil)
+                            print("destination didn't nill")
+                        
+                        
+                        print("try to load goals ti")
+                    }
+                } else {
+                    
+                    if destinationVC.createdRemBD?.remBD.first != nil {
+//                        destinationVC.calledOnce()
+//                        destinationVC.loadDay()
+                        destinationVC.loadItems()
+//                        print("destination didn't nill")
+                    } else {
+//                        destinationVC.calledOnce()
+//                        destinationVC.saveDay()
+//                        destinationVC.loadDay()
+//                        destinationVC.loadItems()
+//
+                        print("just go to create rows")
+                    }
+//
+                    //                        destinationVC.loadRows()
+                    //                    destinationVC.createdRow = currentCategory
+                   
+                    //                        let homeRow = HomeTasks()
+                    //                        try! realm.write {
+                    //                            realm.add(homeRow)
+                    //                        }
+                    //                        destinationVC.createdRow = homeRow
+                }
+            }
             
             
         } else if segue.identifier == segues.goToReminderTime {
@@ -221,43 +294,10 @@ class AddTask: UITableViewController, tableViewReload {
             }
         }
     }
-    
-    
-    //            for goal in addedTasks! {
-    //            if let indexPath = tableView.indexPathForSelectedRow {
-    ////                                                        try! realm.write{
-    ////                                destination.createdTask?.name = task.name}
-    //
-    //
-    ////                destinationVC.createdGoal = addedTasks?[indexPath.row]
-    //                destinationVC.loadRows()
-    ////                destinationVC.createdGoal?.goals = (addedTasks?[indexPath.row].goals)!
-    ////                destinationVC.loadRows()
-    //                print("Perform segue with selected row, and load i guess")
-    //            }
-    //                if goal.goals != ""{
-    //                    if goal.goals != "Unlimited" {
-    //                        destinationVC.createdGoal = goal
-    //                    }
-    //                }
-    //
-    //        }
-    //            try to make it work
-    
-    
-    
-    
-    //            destinationVC.createdGoal = addedTasks
-    
-    
-    
-    
-    
-    
     //MARK: - Add New Tasks
     @IBAction func addButton(_ sender: UIBarButtonItem) {
         
-        print(addedTasks?[0] as Any)
+//        print(addedTasks?[0] as Any)
         
         if let currentCategory = createdTask {
             print("\(currentCategory)")

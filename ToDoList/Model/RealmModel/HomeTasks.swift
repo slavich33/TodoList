@@ -14,4 +14,5 @@ class HomeTasks: Object {
     
     let tasks = List<AddedTasks>()
     let goals = List<GoalsTI>()
+    let remBD = List<RemBD>()
 }

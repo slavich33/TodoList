@@ -17,17 +17,35 @@ protocol RemindBDProtocol {
 
 class RemindBD: UITableViewController {
     
+    var newCell = List<RemBD>()
     let realm = try! Realm()
     var cells: Results<RemBD>?
     public var delegate: RemindBDProtocol!
     let days = Days()
+    var dict = [RemDict(number: 0, day: "Monday", isSelected: false),
+                RemDict(number: 1, day: "Tuesday", isSelected: false),
+                RemDict(number: 2, day: "Wednesday", isSelected: false),
+                RemDict(number: 3, day: "Thuesday", isSelected: false),
+                RemDict(number: 4, day: "Friday", isSelected: false),
+                RemDict(number: 5, day: "Saturday", isSelected: false),
+                RemDict(number: 6, day: "Sunday", isSelected: false)]
+
     let dataFile = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
+    var createdRemBD: HomeTasks? {
+        didSet {
+//            loadItems()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        calledOnce()
-        loadItems()
+        print(createdRemBD)
+//        calledOnce()
+//        loadItems()
+//        for index in createdRemBD!.remBD {
+//            self.tableView.selectRow(at: IndexPath(row: index.uniqueKey, section: 0), animated: false, scrollPosition: .none)
+//                }
  
     }
     
@@ -37,6 +55,143 @@ class RemindBD: UITableViewController {
     
     
     @IBAction func addButton(_ sender: UIBarButtonItem) {
+        
+
+        if let currentCategory = createdRemBD {
+            
+            if currentCategory.remBD.first != nil {
+                
+                
+                
+                //                    for d in dict {
+                //                        try! realm.write {
+                //                            let newRem = RemBD()
+                //                            newRem.number = d.number
+                //                            newRem.day = d.day
+                //                            newRem.isSelected = d.isSelected
+                //                        }
+                //
+                //                    }
+                
+                
+                print("Rembd didn;t nil")
+                
+            }
+            else {
+                //                saveDay()
+                //                loadItems()
+                //                try! realm.write {
+                //
+                ////                    cells = realm.objects(RemBD.self).sorted(byKeyPath: "uniqueKey", ascending: true)
+                //
+                //
+                //                    print(cells)
+                //
+                ////                    let newRem = RemBD()
+                ////                    for rem in dict {
+                ////                        newRem.done = rem.isSelected
+                ////                        newRem.name = rem.day
+                ////                        newRem.uniqueKey = rem.number
+                //                        let newRem = RemBD()
+                //                    for each in dict {
+                //                        let newRem = RemBD()
+                //                        newRem.done = each.isSelected
+                //                        newRem.uniqueKey = each.number
+                //                        newRem.name = each.day
+                //                        newRem.items.append(newRem)
+                //                    }
+                //                    newRem.items.append(objectsIn: cells!)
+                //                    }
+                //                for di in dict {
+                //                    let container = try! Container()
+                //                    try! container.write { transaction in
+                //
+                ////                        transaction.add(di)
+                //                        transaction.append(items: returnResults() )
+                //
+                //                    }
+                //                }
+                
+                for di in dict {
+                    
+                    let container = try! Container()
+                    try! container.write { transaction in
+                        
+                        
+//                        transaction.add(di)
+                        
+                        transaction.append1(items: currentCategory.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
+                    }
+                }
+                //                let container = try! Container()
+                //                try! container.write { transaction in
+                //
+                //
+                //                    transaction.append(dict, item: <#T##List<Object>#>)
+                //
+                //                }
+                if currentCategory.remBD.first != nil {
+                    
+                }
+                loadItems()
+//                try! realm.write{
+////                    currentCategory.remBD.append(objectsIn: cells!)
+//                        let newRem = RemBD()
+//                                     for each in dict {
+////                                         let newRem = RemBD()
+//                                         newRem.isSelected = each.isSelected
+//                                         newRem.number = each.number
+//                                         newRem.day = each.day
+////                                         newRem.items.append(newRem)
+//                                         currentCategory.remBD.append(newRem)
+//                                     }
+//
+//
+//                }
+                
+            }
+            getNames()
+        }
+
+
+//        }
+        
+        
+//        if let currentCategory = createdRemBD {
+//            if let currentData = cells?[0] {
+//                if currentData.name != "" {
+//                    do {
+//                        try self.realm.write {
+//
+//                            print("rewrite current goal")
+//                            currentData.done = delegateRow
+//
+//
+////                            for task in currentCategory.tasks {
+////                                task.goals = delegateRow
+////                            }
+//
+//                        }
+//                    } catch  {
+//                        print("Error saving message \(error) ")
+//                    }
+//                }
+//            } else {
+//                if  changedRow == "" {
+//                    try! realm.write{
+//                        let newRow = GoalsTI()
+//                        newRow.rowDesc = delegateRow
+//                        newRow.rowNumber = pickerRow
+//                        currentCategory.goals.append(newRow)
+//                        realm.add(newRow)
+//                        print("create current goal and append to goals")
+//                    }
+//                }
+//            }
+//        }
+        
+       
+        
         
         self.navigationController?.popViewController(animated: true)
         
@@ -58,11 +213,13 @@ class RemindBD: UITableViewController {
         
         try! realm.write {
             let allDays = getDaysArray(array: days.days)
-            
-            for day in allDays {
-                
-                realm.add(day, update: .all)
-            }
+
+            realm.add(allDays)
+//            for day in allDays {
+//                
+//                realm.add(day)
+////                          , update: .all)
+//            }
         }
         
         self.tableView.reloadData()
@@ -73,8 +230,8 @@ class RemindBD: UITableViewController {
         
         for (tag, n) in array.enumerated() {
             let day = RemBD()
-            day.name = n
-            day.uniqueKey = String(tag)
+            day.day = n
+            day.number = tag
             requiredDays.append(day)
         }
         
@@ -83,10 +240,65 @@ class RemindBD: UITableViewController {
     
     func loadItems() {
         
-        cells = realm.objects(RemBD.self).sorted(byKeyPath: "uniqueKey", ascending: true)
+
+        if let currentCategory = createdRemBD?.remBD {
+            if currentCategory.first != nil {
+                cells = createdRemBD?.remBD.sorted(byKeyPath: "number", ascending: true)
+                print("currentCategory.first != nil")
+            } else {
+                cells = realm.objects(RemBD.self).sorted(byKeyPath: "number", ascending: true)
+                print("currentCategory.first = nil")
+            }
+    }
+//        for resu in createdRemBD!.remBD {
+//            dict = resu.done
+//        }
         
         self.tableView.reloadData()
         
+    }
+    func returnResults() -> Results<RemBD> {
+        
+//        cells = realm.objects(RemBD.self).sorted(byKeyPath: "number", ascending: true)
+        
+        if let currentCategory = createdRemBD?.remBD {
+            if currentCategory.first != nil {
+                cells = createdRemBD?.remBD.sorted(byKeyPath: "number", ascending: true)
+                print("currentCategory.first != nil")
+            } else {
+                cells = realm.objects(RemBD.self).sorted(byKeyPath: "number", ascending: true)
+                print("currentCategory.first = nil")
+            }
+        }
+//        cells = createdRemBD?.remBD.sorted(byKeyPath: "number", ascending: true)
+//        for resu in createdRemBD!.remBD {
+//            dict = resu.done
+//        }
+        
+        self.tableView.reloadData()
+        return cells!
+    }
+    func loadDay() {
+        
+        var cel: Results<RemBD>?
+        cel = createdRemBD?.remBD.sorted(byKeyPath: "number", ascending: true)
+       
+        cells = cel
+//        loadItems()
+       
+//        for cell in cells! {
+//            for c in cells! {
+//                do {
+//                try! realm.write {
+//                    c.done = cell.done
+//                }
+//                } catch {
+//                    print(error)
+//                }
+//            }
+//        }
+        
+        self.tableView.reloadData()
     }
     
     
@@ -94,7 +306,7 @@ class RemindBD: UITableViewController {
     //MARK: - TableView Methods
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cells?.count ?? 7
+        return dict.count
     }
     
     
@@ -104,14 +316,56 @@ class RemindBD: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         let newItem = RemBD()
-        newItem.name = days.days[indexPath.row]
+        newItem.day = days.days[indexPath.row]
+        let week = dict[indexPath.row]
+//        if let item = createdRemBD?.remBD[indexPath.row] {
+//            
+//            cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+//            cell.textLabel?.text = newItem.name
+//            cell.accessoryType = item.done ? .checkmark : .none
+//        }
+//            if cell.accessoryType == .checkmark {
+//                cell.accessoryType = .none
+//                } else {
+//                    cell.accessoryType = .checkmark
+//                }
+//    }
+        
+//        if cells?[0] != nil  {
+//
+////
+////
+////
+//                let week = dict[indexPath.row]
+//                cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+//                cell.textLabel?.text = week.day
+//
+////            cell.accessoryType = (cells?[indexPath.row].done)! ? .checkmark : .none
+//
+////                cell.accessoryType = (cells?[indexPath.row].done)! ? .checkmark : .none
+////
+////            }
+//////            cell.accessoryType = createdRemBD.isSelected ? .checkmark : .none
+//        } else {
+        
+
+      
+//        cell.accessoryType = week.isSelected ? .checkmark : .none
         if let item = cells?[indexPath.row] {
-            
             cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
-            cell.textLabel?.text = item.name
-            cell.accessoryType = item.done ? .checkmark : .none
-            
+            cell.textLabel?.text = item.day
+            cell.accessoryType = item.isSelected ? .checkmark : .none
+            print("It's current item")
         }
+            else {
+            cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+            cell.textLabel?.text = week.day
+            cell.accessoryType = week.isSelected ? .checkmark : .none
+                print("It's current rem cells")
+        }
+        
+       
+
         
         return cell
         
@@ -120,17 +374,33 @@ class RemindBD: UITableViewController {
     //MARK: - TableView Delegate Methods
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
+        dict[indexPath.row].isSelected.toggle()
+//        tableView.reloadRows(at: [indexPath], with: .none)
+            
         
         if let item = cells?[indexPath.row] {
             do {
                 try realm.write {
-                    item.done = !item.done
-                    
+                    print("it's working add with current Accessory in cells")
+//                    let item = RemBD()
+//                    let newRem = RemBD()
+//                    newRem.isSelected = !newRem.isSelected
+//                    cells?[indexPath.row].isSelected = newRem.isSelected
+//                    newRem.name = dict[indexPath.row].day
+//                    newRem.done = dict[indexPath.row].isSelected
+//                    newRem.uniqueKey = indexPath.row
+                    item.isSelected = !item.isSelected
+//                    realm.add(newRem)
+
                 }
             } catch {
                 print("Error saving done, \(error)")
             }
+        } else {
+            
+//            dict[indexPath.row].isSelected = !dict[indexPath.row].isSelected
+            print("it's working add with dict cells")
         }
         
         tableView.reloadData()
@@ -142,16 +412,29 @@ class RemindBD: UITableViewController {
     
     func getNames() {
         
-        let res =  realm.objects(RemBD.self).filter("done = true").sorted(byKeyPath: "uniqueKey", ascending: true)
+//        let res =  realm.objects(RemBD.self).filter("isSelected = true").sorted(byKeyPath: "number", ascending: true)
+//        var arrayNames: [String] = []
+//        if arrayNames.isEmpty {
+//
+//            self.delegate.textRemindBD(text: arrayNames)
+//        }
+//
+//        for n in res {
+//
+//            arrayNames.append(String(n.day.prefix(2)))
+//            self.delegate.textRemindBD(text: arrayNames)
+//            print(arrayNames)
+        
+        let res =  createdRemBD?.remBD.filter("isSelected = true").sorted(byKeyPath: "number", ascending: true)
         var arrayNames: [String] = []
         if arrayNames.isEmpty {
             
             self.delegate.textRemindBD(text: arrayNames)
         }
         
-        for n in res {
+        for n in res! {
             
-            arrayNames.append(String(n.name.prefix(2)))
+            arrayNames.append(String(n.day.prefix(2)))
             self.delegate.textRemindBD(text: arrayNames)
             print(arrayNames)
             

@@ -131,6 +131,39 @@ struct cellTips {
     var cellArray = ["Working out", "Drink water", "Jogging", "Call doctor", "Go out with kids", "Gymnastics with child", "Pool with family", "Call to parents", "Learning new language", "Reading", "Meditation", "Go to gym", "Cleaning", "Go to market", "Cook a dinner", "Dissemble a closet"  ]
 }
 
+struct RemDict {
+    
+    public var number : Int
+    public var day : String
+    public var isSelected : Bool
+   
+    
+//    var remBdDict = [0:"Monday", 1:"Tuesday", 2:"Wendsday", 3:"Thursday", 4:"Friday", 5:"Saturday", 6:"Sunday"]
+    
+}
+
+extension RemDict: Persistable {
+    
+    
+    public init(managedObject: RemBD) {
+        number = managedObject.number
+        day = managedObject.day
+        isSelected = managedObject.isSelected
+        
+        
+        
+    }
+    public func managedObject() -> RemBD {
+        let character = RemBD()
+        character.number = number
+        character.isSelected = isSelected
+        character.day = day
+        return character
+    }
+    
+    
+}
+
 struct SegueKeys {
     
     var goToTips = "goToTaskName-tips"
