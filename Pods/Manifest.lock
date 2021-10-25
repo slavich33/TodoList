@@ -1,13 +1,13 @@
 PODS:
-  - CalendarKit (1.0.13)
+  - CalendarKit (1.0.14)
   - Charts (3.6.0):
     - Charts/Core (= 3.6.0)
   - Charts/Core (3.6.0)
-  - Realm (10.16.0):
-    - Realm/Headers (= 10.16.0)
-  - Realm/Headers (10.16.0)
-  - RealmSwift (10.16.0):
-    - Realm (= 10.16.0)
+  - Realm (10.17.0):
+    - Realm/Headers (= 10.17.0)
+  - Realm/Headers (10.17.0)
+  - RealmSwift (10.17.0):
+    - Realm (= 10.17.0)
   - SwipeCellKit (2.7.1)
 
 DEPENDENCIES:
@@ -25,12 +25,12 @@ SPEC REPOS:
     - SwipeCellKit
 
 SPEC CHECKSUMS:
-  CalendarKit: acdb4933842e580a87b7dce2fa3723ab445a02bd
+  CalendarKit: 89068700d1af62ddb17e00d088a59fa9f8ae04a1
   Charts: b1e3a1f5a1c9ba5394438ca3b91bd8c9076310af
-  Realm: b6027801398f3743fc222f096faa85281b506e6c
-  RealmSwift: b02a3d0e4947955da960b642c98ad3a461fc4e70
+  Realm: 9533276bd76f66aa2fd0d3ffe700c1f6023dcab6
+  RealmSwift: 57f5d59aa29852587aad1e861989e7af139894b5
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
 
 PODFILE CHECKSUM: 966b1de6ffcbd9f86c0aa166d06dbf14f60e1f11
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

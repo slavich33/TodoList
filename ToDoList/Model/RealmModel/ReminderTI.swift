@@ -10,8 +10,8 @@ import RealmSwift
 
 class ReminderTI: Object {
     
-    @objc dynamic var date: String = ""
-    @objc dynamic var uniqueKey: String = "SelectedTime"
+    @Persisted var date: String = ""
+    @Persisted var uniqueKey: String = "SelectedTime"
     
     override class func primaryKey() -> String? {
               return "uniqueKey"

@@ -28,9 +28,7 @@ class TaskTips: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
+
         cells.append(Tips.init(sectionName: "Health", cellName: ["Working out", "Drink water", "Jogging", "Call doctor"]))
         cells.append(Tips.init(sectionName: "Family Time", cellName: ["Go out with kids", "Gymnastics with child", "Pool with family", "Call to parents"]))
         cells.append(Tips.init(sectionName: "Self Development", cellName: ["Learning new language", "Reading", "Meditation", "Go to gym"]))
@@ -62,27 +60,11 @@ class TaskTips: UITableViewController{
         if let indexPath = tableView.indexPathForSelectedRow {
 
             if let name = cells[indexPath.section].cellName?[indexPath.row] {
-               
-//                if name != selectedCellValue {
-//                    self.delegate?.textTips(string: name)
-//                } else if name == "" {
-//                    self.delegate?.textTips(string: selectedCellValue)
-//                } else if name == selectedCellValue {
-//                    self.delegate.textTips(string: selectedCellValue)
-//                }
-                
                 
                 self.delegate.textTips(string: name)
                 
                 self.reloadDelegate.reload()
-//                print("\(selectedCellValue)")
-//                if name != "" {
-//                    self.delegate?.textTips(string: name)
-//
-//                } else {
-//                    self.delegate?.textTips(string: selectedCellValue)
-//
-//                }
+
             }
                
             tableView.reloadData()

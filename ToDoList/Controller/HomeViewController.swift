@@ -12,15 +12,30 @@ import SwipeCellKit
 let dateReuseIdentifier = "dayCell"
 let startingIndex = 400
 
+protocol getArray{
+    func getArr(dict: List<RemBD>)
+}
 
 
-class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDataSource, tableViewReload, UIAdaptivePresentationControllerDelegate {
+
+class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDataSource, tableViewReload, UIAdaptivePresentationControllerDelegate, getArray {
+//    func reload() {
+//        tableView.reloadData()
+//    }
+    
+    func getArr(dict: List<RemBD>) {
+     
+        remBDequitable = dict
+    }
+    
     
     @IBOutlet var tableView: UITableView!
     
     let realm = try! Realm()
     var tappedOnTheCell = false
     var homeArray: Results<HomeTasks>?
+    var remBDequitable = List<RemBD>().detached()
+//    List<RemBD>()
     
     
     
@@ -43,6 +58,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         //        reload()
         print(tappedOnTheCell)
         print(realm.configuration.fileURL)
+        print(remBDequitable)
     }
     
     override func viewDidLoad() {
@@ -67,10 +83,11 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
     //MARK: - TableView DataSource Methods
     func reload() {
         
+        
+        
         print("Reloaded")
         self.tableView.reloadData()
         for home in homeArray! {
-            
             for task in home.tasks {
                 for goal in home.goals {
                     if goal.rowDesc != task.goals {
@@ -85,21 +102,110 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
             }
-            
             if home.name == "" {
                 try! realm.write {
                     //                    realm.delete(home, cascading: true)
                     realm.delete(home.goals)
+                    realm.delete(home.remBD)
                     realm.delete(home)
                     
                     self.tableView.reloadData()
                     print("Deleted")
                 }
             }
+        }
+            var d = [RemDict(managedObject: RemBD())]
+            var e = RemDict(managedObject: RemBD())
+
+            for home in homeArray! {
+//                for day in home.tasks {
+                    let newRemBD = home.remBD
+                    for rbd in newRemBD {
+                        e.number = rbd.number
+                        e.day = rbd.day
+                        e.isSelected = rbd.isSelected
+                        d.append(e)
+//                                print(equalRemBD)
+                               
+//                                equalRemBD.
+                    }
+            }
+//                print(remBDequitable)
+                let listRemBD = List<RemBD>()
+                for home in homeArray! {
+                    listRemBD.append(objectsIn: home.remBD)
+                    
+                }
+//        for list in listRemBD {
+//            for rem in remBDequitable {
+//                if list.isSameObject(as: rem) {
+//                    print("All good")
+//                } else {
+//                    try! realm.write {
+//                        for home in homeArray! {
+//                            for h in home.remBD {
+//                                h.number = rem.number
+//                                h.isSelected = rem.isSelected
+//                                h.day = rem.day
+//                            }
+//
+//                        }
+//                    }
+//                    print("Not good")
+//                }
+//            }
+//        }
+        
+        
+//        if remBDequitable.issame {
+//                    try! realm.write {
+//
+////                            home.remBD.append(objectsIn: remBDequitable)
+//
+//                        print("deleting changed RemBD")
+//                    }
+//
+//                }
+//                print(home.remBD)
+//
+//                    if d != remBDequitable {
+//                            try! realm.write {
+//                                realm.delete(home.remBD)
+//                            }
+                                
+//                                for di in remBDequitable {
+//
+//                                    let container = try! Container()
+//                                    try! container.write { transaction in
+////                                            need to WORK here
+//                                        transaction.append1(items: home.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
+////                                        home.remBD =
+//                                        print(listRemBD)
+//                                    }
+//                                }
+//                        try! realm.write {
+//                        home.remBD = listRemBD
+//                        }
+//                                realm.delete(home.remBD)
+//                                home.remBD.append(objectsIn: day.remBD)
+                                
+                                
+//                            }
+                        
+//                    }
+//                    if home.arrayDays != day.readDays {
+//                        try! realm.write {
+//
+//                        }
+//                    }
+//                }
+//            }
+            
+           
             
             //Validation for goals which were changed without saving AddedTasks
             
-        }
+//        }
         
         self.tableView.reloadData()
         
@@ -163,6 +269,8 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
             let nav = segue.destination as! UINavigationController
             let destination = nav.topViewController as! AddTask
             destination.delegate = self
+            destination.equatDelegate = self
+//            destination.copiedRList = remBDequitable
             segue.destination.presentationController?.delegate = self
             
             for task in homeArray!{
@@ -170,6 +278,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                     
                     destination.createdTask = homeArray?[indexPath.row]
                     destination.loadName()
+                    destination.daysToRead = task.arrayDays
                     //                            if task.goals != nil {
                     //                                destination.goals = ta
                     //                            }
@@ -197,6 +306,11 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         // (I found that overriding dismiss in the child and calling
         // presentationController.delegate?.presentationControllerDidDismiss
         // works well).
+        var des = AddTask()
+        print(des)
+        des.goesToChilds = false
+        print(des)
+        des.validateList()
         reload()
         print("Child was dismissed")
     }

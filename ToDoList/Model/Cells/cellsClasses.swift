@@ -142,7 +142,7 @@ struct RemDict {
     
 }
 
-extension RemDict: Persistable {
+extension RemDict: Persistable, Equatable {
     
     
     public init(managedObject: RemBD) {

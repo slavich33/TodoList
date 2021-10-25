@@ -19,40 +19,15 @@ class RemBD: Object {
     
 
 //    @objc dynamic var uniqueKey: Int = 0
-    @objc dynamic var number: Int = 0
-    @objc dynamic var day: String = ""
-    @objc dynamic var isSelected: Bool = false
+    @Persisted var number: Int = 0
+    @Persisted var day: String = ""
+    @Persisted var isSelected: Bool = false
      var items = List<RemBD>()
 
     var parentCategory = LinkingObjects(fromType: HomeTasks.self, property: "remBD")
-    
-//    override class func primaryKey() -> String? {
-//              return "number"
-//         }
-}
-//extension RemBD: Persistable {
-//
-//    
-//    public convenience init(managedObject: RemDict) {
-//        number = managedObject.number
-//        day = managedObject.day
-//        isSelected = managedObject.isSelected
-//    }
-//    func managedObject() -> RemBD {
-//        var character = RemBD()
-//        character.number = number
-//        character.isSelected = isSelected
-//        character.day = day
-//        return character
-//    }
-//    
-//    typealias ManagedObject = RemBD
-//
-//
-//
-//
-//}
+//    var parentCategory1 = LinkingObjects(fromType:  AddedTasks.self, property: "remBD")
 
+}
 public final class WriteTransaction {
     public var items = List<Object>()
     private let realm: Realm
@@ -60,39 +35,18 @@ public final class WriteTransaction {
         self.realm = realm
     }
     func add<T: Persistable>(_ value: T) {
-//                                    , item: RemBD) {
-        let remDict = value.managedObject()
         realm.add(value.managedObject())
-//        let cells = realm.objects(value.managedObject())
-//       let homeT =  HomeTasks().remBD
-//        homeT.append()
-//        let rem = RemBD()
-//        rem.items.append(item)
-//        item.append(value)
     }
     public func append<T: Persistable>(_ value: T, item: List<RealmSwift.Object>) {
-//         RemBD().items.append(item)
         item.append(objectsIn: [value.managedObject()])
     }
-//    func append(items: List<RealmSwift.Object>, number: Int, day: String, isSelected: Bool) {
-////         RemBD().items.append(item)
-//        let rem = RemBD()
-//         rem.number = number
-//        rem.isSelected = isSelected
-//        rem.day = day
-//         rem.items.append(objectsIn: items)
-//         realm.add(rem)
-//
-//    }
+
     func append1(items: List<RemBD>, number: Int, day: String, isSelected: Bool) {
-//         RemBD().items.append(item)
         let rem = RemBD()
          rem.number = number
         rem.isSelected = isSelected
         rem.day = day
          items.append(rem)
-//         realm.add(rem)
-         
     }
 }
 // Implement the Container
@@ -113,3 +67,4 @@ public final class Container {
         
     }
 }
+

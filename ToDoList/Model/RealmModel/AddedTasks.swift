@@ -10,8 +10,11 @@ import RealmSwift
 
 class AddedTasks: Object {
   
-    @objc dynamic var name: String = ""
-    @objc dynamic var goals: String = ""
+    @Persisted var name: String = ""
+    @Persisted var goals: String = ""
+    @Persisted var readDays: String = ""
+    
+    var remBD = List<RemBD>()
     
 //    @objc dynamic var uniqueKey: String = "TaskName"
     var parentCategory = LinkingObjects(fromType: HomeTasks.self, property: "tasks")

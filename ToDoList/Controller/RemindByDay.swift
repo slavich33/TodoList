@@ -17,6 +17,7 @@ protocol RemindBDProtocol {
 
 class RemindBD: UITableViewController {
     
+    var arrayDelegate: getDict!
     var newCell = List<RemBD>()
     let realm = try! Realm()
     var cells: Results<RemBD>?
@@ -34,7 +35,7 @@ class RemindBD: UITableViewController {
 
     var createdRemBD: HomeTasks? {
         didSet {
-//            loadItems()
+
         }
     }
     
@@ -43,10 +44,6 @@ class RemindBD: UITableViewController {
         print(createdRemBD)
 //        calledOnce()
 //        loadItems()
-//        for index in createdRemBD!.remBD {
-//            self.tableView.selectRow(at: IndexPath(row: index.uniqueKey, section: 0), animated: false, scrollPosition: .none)
-//                }
- 
     }
     
    
@@ -61,17 +58,6 @@ class RemindBD: UITableViewController {
             
             if currentCategory.remBD.first != nil {
                 
-                
-                
-                //                    for d in dict {
-                //                        try! realm.write {
-                //                            let newRem = RemBD()
-                //                            newRem.number = d.number
-                //                            newRem.day = d.day
-                //                            newRem.isSelected = d.isSelected
-                //                        }
-                //
-                //                    }
                 
                 
                 print("Rembd didn;t nil")
@@ -112,28 +98,22 @@ class RemindBD: UITableViewController {
                 //                    }
                 //                }
                 
-                for di in dict {
-                    
-                    let container = try! Container()
-                    try! container.write { transaction in
-                        
-                        
-//                        transaction.add(di)
-                        
-                        transaction.append1(items: currentCategory.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
-                    }
-                }
-                //                let container = try! Container()
-                //                try! container.write { transaction in
-                //
-                //
-                //                    transaction.append(dict, item: <#T##List<Object>#>)
-                //
-                //                }
+//                for di in dict {
+//                    
+//                    let container = try! Container()
+//                    try! container.write { transaction in
+//
+//                        transaction.append1(items: currentCategory.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
+//                        
+//                    }
+//                }
+                
+                
+           
                 if currentCategory.remBD.first != nil {
                     
                 }
-                loadItems()
+//                loadItems()
 //                try! realm.write{
 ////                    currentCategory.remBD.append(objectsIn: cells!)
 //                        let newRem = RemBD()
@@ -150,6 +130,7 @@ class RemindBD: UITableViewController {
 //                }
                 
             }
+            self.arrayDelegate.getArray(dict: dict)
             getNames()
         }
 
@@ -250,16 +231,12 @@ class RemindBD: UITableViewController {
                 print("currentCategory.first = nil")
             }
     }
-//        for resu in createdRemBD!.remBD {
-//            dict = resu.done
-//        }
         
         self.tableView.reloadData()
         
     }
     func returnResults() -> Results<RemBD> {
         
-//        cells = realm.objects(RemBD.self).sorted(byKeyPath: "number", ascending: true)
         
         if let currentCategory = createdRemBD?.remBD {
             if currentCategory.first != nil {
@@ -270,10 +247,7 @@ class RemindBD: UITableViewController {
                 print("currentCategory.first = nil")
             }
         }
-//        cells = createdRemBD?.remBD.sorted(byKeyPath: "number", ascending: true)
-//        for resu in createdRemBD!.remBD {
-//            dict = resu.done
-//        }
+
         
         self.tableView.reloadData()
         return cells!
@@ -284,20 +258,7 @@ class RemindBD: UITableViewController {
         cel = createdRemBD?.remBD.sorted(byKeyPath: "number", ascending: true)
        
         cells = cel
-//        loadItems()
-       
-//        for cell in cells! {
-//            for c in cells! {
-//                do {
-//                try! realm.write {
-//                    c.done = cell.done
-//                }
-//                } catch {
-//                    print(error)
-//                }
-//            }
-//        }
-        
+
         self.tableView.reloadData()
     }
     
@@ -318,39 +279,7 @@ class RemindBD: UITableViewController {
         let newItem = RemBD()
         newItem.day = days.days[indexPath.row]
         let week = dict[indexPath.row]
-//        if let item = createdRemBD?.remBD[indexPath.row] {
-//            
-//            cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
-//            cell.textLabel?.text = newItem.name
-//            cell.accessoryType = item.done ? .checkmark : .none
-//        }
-//            if cell.accessoryType == .checkmark {
-//                cell.accessoryType = .none
-//                } else {
-//                    cell.accessoryType = .checkmark
-//                }
-//    }
-        
-//        if cells?[0] != nil  {
-//
-////
-////
-////
-//                let week = dict[indexPath.row]
-//                cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
-//                cell.textLabel?.text = week.day
-//
-////            cell.accessoryType = (cells?[indexPath.row].done)! ? .checkmark : .none
-//
-////                cell.accessoryType = (cells?[indexPath.row].done)! ? .checkmark : .none
-////
-////            }
-//////            cell.accessoryType = createdRemBD.isSelected ? .checkmark : .none
-//        } else {
-        
 
-      
-//        cell.accessoryType = week.isSelected ? .checkmark : .none
         if let item = cells?[indexPath.row] {
             cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
             cell.textLabel?.text = item.day
@@ -406,7 +335,7 @@ class RemindBD: UITableViewController {
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
         
-        getNames()
+//        getNames()
         
     }
     

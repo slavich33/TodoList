@@ -11,8 +11,8 @@ import RealmSwift
 class GoalsTI: Object {
     
 //    @objc dynamic var uniqueKey: String = "SelectedRow"
-    @objc dynamic var rowNumber: Int = 0
-    @objc dynamic var rowDesc: String = ""
+    @Persisted var rowNumber: Int = 0
+    @Persisted var rowDesc: String = ""
    
     
     var parentCategory = LinkingObjects(fromType: HomeTasks.self, property: "goals")
