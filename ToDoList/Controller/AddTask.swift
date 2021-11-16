@@ -20,42 +20,8 @@ protocol getDict {
     
 }
 
-class AddTask: UITableViewController, tableViewReload, getDict {
+class AddTask: UITableViewController {
     
-    
-    func getArray(dict: [RemDict]) {
-        
-       arrayFromRemBD = dict
-        
-    }
-    
-    func writeArray(dict: [RemDict]) {
-        if let currentCategory = createdTask {
-            
-            for di in dict {
-                
-                let container = try! Container()
-                try! container.write { transaction in
-
-                    transaction.append1(items: currentCategory.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
-                    
-                }
-            }
-        }
-    }
-    
-    func reload() {
-        self.tableView.reloadData()
-        
-        print("Protocol with reload teblView is worked")
-    }
-    
-    
-    @IBAction func taskingTextField(_ sender: UITextField) {
-        //        tableView.reloadData()
-        //        UITextField().text = homeTaskName
-        print("Tasking reload data working")
-    }
     var daysToRead = ""
     var taskingLabels = tasking()
     let realm = try! Realm()
@@ -64,6 +30,7 @@ class AddTask: UITableViewController, tableViewReload, getDict {
     var remindBDArray: [String] = ["No"]
     var segues = SegueKeys()
     var reminderTime = "No"
+
     var goals = "Unlimited"
     var loaded: Bool = false
     var homeTaskName = ""
@@ -72,7 +39,6 @@ class AddTask: UITableViewController, tableViewReload, getDict {
     var equalRemBD = RemDict(managedObject: RemBD())
     var equatDelegate : getArray!
     var copiedRList = List<RemBD>()
-    var goesToChilds = true
     var arrayFromRemBD: [RemDict]?
     
     
@@ -95,65 +61,15 @@ class AddTask: UITableViewController, tableViewReload, getDict {
         taskingLabels.tipsLabel?.text = "Hello"
         navigationItem.backBarButtonItem?.isEnabled = false
         setupHideKeyboardOnTap()
-        //                        loadTasks()
-        //        tableView.reloadData()
         tasking().textField?.delegate = self
         self.tableView.rowHeight = 44
         print("current Added tasks \(String(describing: addedTasks))")
         print("yey \(goals)")
         print("\(daysToRead)")
-        
-        
     }
-    override func viewWillDisappear(_ animated: Bool) {
-        
-        //       print("ViewWIll Dissapear")
-        
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        
-        if isMovingToParent {
-            print("View did Dissapear")
-        }
-        if ((presentationController?.delegate?.presentationControllerDidDismiss) != nil) {
-            print("View did Dissapear")
-        }
-        
-        //        if goesToChilds == false {
-//        validateList()
-        //        }
-        
-    }
-    
-    
-    
-    
-    
+
     //MARK: - TableVIew Data source Methods
-    
-    
-    func validateList() {
-        
-        if let curRemList = createdTask {
-            
-            copiedRList = curRemList.remBD
-            
-            if let currentTask = addedTasks?[0] {
-                if curRemList.remBD.isEqual(copiedRList)  {
-                    print("They are equal")
-                    
-                } else {
-                    try! realm.write {
-                        realm.delete(curRemList.remBD)
-                        createdTask?.remBD = copiedRList
-                        realm.delete(copiedRList)
-                        print("deleting current rembd")
-                    }
-                }
-            }
-        }
-    }
-    
+
     func reloadTable() {
         tableView.reloadData()
     }
@@ -163,9 +79,6 @@ class AddTask: UITableViewController, tableViewReload, getDict {
         return 4
     }
     
-    
-    
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if indexPath.row == 0 {
@@ -173,7 +86,6 @@ class AddTask: UITableViewController, tableViewReload, getDict {
             
             textFieldDidEndEditing(cell.textField)
             cell.textField.delegate = self
-            
             
             return cell
             
@@ -189,13 +101,12 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                 cell.timeLabel?.text = daysToRead
             }
             
-            
             return cell
             
         } else if indexPath.row == 2 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "reminderTime") as! reminderTime
             
-            if remindBDArray[0] == "No" {
+            if reminderTime == "No" {
                 cell.timeLabel.text = "No"
             } else {
                 cell.timeLabel.text = reminderTime
@@ -224,10 +135,8 @@ class AddTask: UITableViewController, tableViewReload, getDict {
         } else if indexPath.row == 2 {
             self.performSegue(withIdentifier: segues.goToReminderTime, sender: indexPath)
         } else if indexPath.row == 3 {
-            
             self.performSegue(withIdentifier: segues.goToGoal, sender: indexPath)
         }
-        
     }
     //MARK: - addNew Tips
     
@@ -236,10 +145,18 @@ class AddTask: UITableViewController, tableViewReload, getDict {
         performSegue(withIdentifier: segues.goToTips, sender: self)
         
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    func toDict(items: List<RemBD>) ->[RemDict] {
         
-        validateList()
+        var arDict = [RemDict]()
+        for d in items {
+            let dict = RemDict(managedObject: d)
+            arDict.append(dict)
+            
+        }
+        return arDict
+    }
+        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == segues.goToTips {
             
@@ -256,80 +173,44 @@ class AddTask: UITableViewController, tableViewReload, getDict {
             
         } else if segue.identifier == segues.goToRemindByDay {
             
-            var destinationVC = segue.destination as! RemindBD
+            let destinationVC = segue.destination as! RemindBD
             
             destinationVC.delegate = self
+            destinationVC.arrayDelegate = self
+            
             
             if let currentCategory = createdTask {
                 
                 destinationVC.createdRemBD = currentCategory
-                //                destinationVC.calledOnce()
+                
                 if let currentData = addedTasks?[0] {
-                    if currentData.goals != ""  {
-                        
-                        //try to change load rows inside AddedTask
-                        //                        this is error with loading rows
-                        
-                        
-                        //                        destinationVC.delegateRow = goals
+                    if currentData.readDays != ""  {
+                        if arrayFromRemBD != nil {
+                            destinationVC.dict = arrayFromRemBD!
+                        } else {
+                            destinationVC.dict = toDict(items: currentCategory.remBD)
+                        }
                         
                         if destinationVC.createdRemBD?.remBD.first != nil {
                             destinationVC.loadDay()
-                            //                            if let indexPath = tableView.indexPathForSelectedRow {
-                            //                                for cr in currentCategory.remBD {
-                            //                                    let dici = RemDict(number: cr.number, day: cr.day, isSelected: cr.isSelected)
-                            //                                    destinationVC.dict = [dici]
-                            ////                                    destinationVC.dict[indexPath.row].number = cr.uniqueKey
-                            ////                                     destinationVC.dict[indexPath.row].isSelected = cr.done
-                            ////                                     destinationVC.dict[indexPath.row].day = cr.name
-                            //                                }
-                            //                            destinationVC.loadDay()
-                            
-                            
-                            
-                            //                                for cr in currentCategory.remBD {
-                            //                                    do {
-                            //                                    try realm.write {
-                            //                                        rem.done = cr.done
-                            //                                    }
-                            //                                    } catch {
-                            //                                        print(error)
-                            //                                    }
-                            //                                }
-                            
                         }
-                        //                            destinationVC.loadDay()
-                        //                            destinationVC.saveDay()
-                        //                            destinationVC.cells?.first?.done = ((currentCategory.remBD.first?.done) != nil)
                         print("destination didn't nill")
-                        
-                        
                         print("try to load goals ti")
                     }
                 } else {
                     
+                    if arrayFromRemBD != nil {
+                        destinationVC.dict = arrayFromRemBD!
+                    }
+                    
                     if destinationVC.createdRemBD?.remBD.first != nil {
-                        //                        destinationVC.calledOnce()
-                        //                        destinationVC.loadDay()
+                        
                         destinationVC.loadItems()
-                        //                        print("destination didn't nill")
+                        print("destination didn't nill")
                     } else {
-                        //                        destinationVC.calledOnce()
-                        //                        destinationVC.saveDay()
-                        //                        destinationVC.loadDay()
-                        //                        destinationVC.loadItems()
-                        //
+                        
                         print("just go to create rows")
                     }
-                    //
-                    //                        destinationVC.loadRows()
-                    //                    destinationVC.createdRow = currentCategory
-                    
-                    //                        let homeRow = HomeTasks()
-                    //                        try! realm.write {
-                    //                            realm.add(homeRow)
-                    //                        }
-                    //                        destinationVC.createdRow = homeRow
                 }
             }
             
@@ -339,6 +220,63 @@ class AddTask: UITableViewController, tableViewReload, getDict {
             let destinationVC = segue.destination as! RemindTi
             
             destinationVC.delegate = self
+           
+            if let currentCategory = createdTask {
+                
+                destinationVC.createdTime = currentCategory
+                
+                if  let currentData = addedTasks?[0] {
+                    
+                    
+                    
+                        if reminderTime == "No" {
+//                            for date in currentCategory.remindTi {
+//                                reminderTime = date.date
+//                            }
+                            destinationVC.currentDate = reminderTime
+                        } else {
+                            destinationVC.currentDate = reminderTime
+//                            destinationVC.dict = toDict(items: currentCategory.remBD)
+                        }
+                        
+//                        if destinationVC.createdTime?.remindTi.first != nil {
+////                            destinationVC.loadDay()
+//                            destinationVC.currentDate = reminderTime
+//                        }
+                        print("destination didn't nill")
+                        print("try to load goals ti")
+                    
+                } else {
+                    
+                    if reminderTime != "No" {
+                        destinationVC.currentDate = reminderTime
+                    }
+                    
+//                    if destinationVC.createdTime?.remindTi.first != nil {
+////                            destinationVC.loadDay()
+//                        destinationVC.currentDate = reminderTime
+//                        print("destination didn't nill")
+//                    } else {
+//
+//                        print("just go to create rows")
+//                    }
+                }
+                
+//                if reminderTime == "No" {
+//
+//                }
+                
+//                if let currentData = addedTasks?[0] {
+//                    
+//                    for ti in currentCategory.remindTi {
+//                        destinationVC.currentDate = ti.date
+//                    }
+//                    
+//                }
+               
+
+            }
+            
         } else if segue.identifier == segues.goToGoal {
             
             let destinationVC = segue.destination as! Goals
@@ -351,11 +289,7 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                 
                 if let currentData = addedTasks?[0] {
                     if currentData.goals != ""  {
-                        
-                        //try to change load rows inside AddedTask
-                        //                        this is error with loading rows
-                        
-                        
+
                         destinationVC.delegateRow = goals
                         
                         if destinationVC.createdRow?.goals.first != nil {
@@ -372,23 +306,13 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                         destinationVC.loadRows()
                         print("destination didn't nill")
                     }
-                    //                        destinationVC.loadRows()
-                    //                    destinationVC.createdRow = currentCategory
                     print("just go to create rows")
-                    //                        let homeRow = HomeTasks()
-                    //                        try! realm.write {
-                    //                            realm.add(homeRow)
-                    //                        }
-                    //                        destinationVC.createdRow = homeRow
                 }
             }
         }
     }
     //MARK: - Add New Tasks
     @IBAction func addButton(_ sender: UIBarButtonItem) {
-        
-        //        print(addedTasks?[0] as Any)
-        
         
         if let currentCategory = createdTask {
             print("\(currentCategory)")
@@ -397,57 +321,22 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                 if currentData.name != "" {
                     do {
                         try self.realm.write {
-                            //                            let newTask = AddedTasks()
-                            //                            newTask.name = homeTaskName
-                            //                            print(homeTaskName)
-                            //                            currentCategory.tasks.append(newTask)
+                            
                             currentCategory.name = homeTaskName
-                            currentCategory.arrayDays = daysToRead
+//                            currentCategory.arrayDays = daysToRead
                             currentData.name = homeTaskName
-                            //                            if let currentGoal =
                             currentData.goals = goals
                             currentData.readDays = daysToRead
-                            
-                            //                            if currentData.remBD == currentCategory.remBD {
-                            //                                realm.delete(currentData.remBD)
-                            //                                let newTask = AddedTasks()
-                            //                                var newRemBD = List<RemBD>()
-                            //                                newRemBD = currentCategory.remBD.detached()
-                            //                                newTask.remBD = newRemBD
-                            //                            currentData.remBD.append(objectsIn: newRemBD)
-                            //                            } else {
-                            //
-                            //                            }
-                            
-                            //                            let newTask = AddedTasks()
-                            //                            var newRemBD = List<RemBD>()
-                            //                            newRemBD = currentCategory.remBD.detached()
-                            //                            newTask.remBD = newRemBD
-                            //                            let newRemBD = currentCategory.remBD
-                            //                            var d = [RemDict(managedObject: RemBD())]
-                            
-                            //                            for rbd in newRemBD {
-                            //                                equalRemBD.number = rbd.number
-                            //                                equalRemBD.day = rbd.day
-                            //                                equalRemBD.isSelected = rbd.isSelected
-                            //                                d.append(equalRemBD)
-                            ////                                print(equalRemBD)
-                            ////                                print(d)
-                            ////                                equalRemBD.
-                            //                            }
-                            
-                            //                            self.equatDelegate.getArr(dict: d)
-                            
+                            currentData.reminderTime = reminderTime
+                            currentCategory.remindTi.first?.date = reminderTime
                             
                         }
                     } catch  {
                         print("Error saving message \(error) ")
                     }
                 }
-                // Try to make code here
+                
             } else {
-                
-                
                 
                 if homeTaskName != "" {
                     print(createdTask!)
@@ -458,39 +347,13 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                             newTask.name = homeTaskName
                             newTask.goals = goals
                             newTask.readDays = daysToRead
+                            newTask.reminderTime = reminderTime
                             let newGoal = GoalsTI()
                             newGoal.rowNumber = Int(goals) ?? 0
                             
-                            
-                            
-                            //                            var copiedRBD = [RemBD]()
-                            //                            for r in currentCategory.remBD {
-                            //                                let unmanagedRBD = RemBD(value: r)
-                            //                                copiedRBD.append(unmanagedRBD)
-                            //                            }
-                            
-                           
-                            //                            var newRemBD = List<RemBD>()
-                            //                            newRemBD = currentCategory.remBD
-                            //                            newTask.remBD.append(objectsIn: newRemBD)
-                            
-                            //                            var d = [RemDict(managedObject: RemBD())]
-                            //                            for rbd in newRemBD {
-                            //                                equalRemBD.number = rbd.number
-                            //                                equalRemBD.day = rbd.day
-                            //                                equalRemBD.isSelected = rbd.isSelected
-                            //                                d.append(equalRemBD)
-                            ////                                print(equalRemBD)
-                            ////                                print(d)
-                            ////                                equalRemBD.
-                            //                            }
-                            //
                             self.equatDelegate.getArr(dict: copiedRList)
                             
-                            //                            print(homeTaskName)
                             currentCategory.tasks.append(newTask)
-                            
-                            
                             
                             let predicate = NSPredicate(format: "goals.@count > 0")
                             let filteredRes = realm.objects(HomeTasks.self).filter(predicate)
@@ -502,28 +365,23 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                                 print("GolasTI were added before")
                             }
                             
+                            let newTI = ReminderTI()
+                            newTI.date = reminderTime
+                            currentCategory.remindTi.append(newTI)
+                            
                             currentCategory.name = homeTaskName
-                            currentCategory.arrayDays = daysToRead
+//                            currentCategory.arrayDays = daysToRead
+//                            currentCategory.remTi = reminderTime
                         }
                     } catch  {
                         print("Error saving message \(error) ")
                     }
-                    
                 }
-                
             }
             
-            
-            //            if currentCategory.remBD != copiedRList {
-            //                try! realm.write {
-            //                    currentCategory.remBD = copiedRList
-            //                    print("deleting current rembd")
-            //                }
-            //            } else {
-            //                    print("They are equal")
-            //                }
-            
-            validateList()
+            if arrayFromRemBD != nil {
+                writeArray(dict: arrayFromRemBD!)
+            }
             
             if currentCategory.name == "" {
                 for goal in currentCategory.goals {
@@ -535,18 +393,41 @@ class AddTask: UITableViewController, tableViewReload, getDict {
                     }
                 }
             }
-            
         }
         
-        
         self.delegate.reload()
-        
         dismiss(animated: true)
         
-        
-        //        }
     }
     //MARK: - data manipulation methods
+    
+    func writeArray(dict: [RemDict]) {
+        if let currentCategory = createdTask {
+            
+            if (addedTasks?[0]) != nil {
+                
+                try! realm.write {
+                    realm.delete(currentCategory.remBD)
+                    
+                }
+            }
+            print(currentCategory.remBD)
+            for di in dict {
+                
+                let container = try! Container()
+                try! container.write { transaction in
+                    
+                    if (addedTasks?[0]) != nil {
+                        
+                        transaction.append1(items: currentCategory.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
+                        
+                    } else {
+                        transaction.append1(items: currentCategory.remBD, number: di.number, day: di.day, isSelected: di.isSelected)
+                    }
+                }
+            }
+        }
+    }
     
     func save(tasks: AddedTasks) {
         
@@ -578,62 +459,36 @@ class AddTask: UITableViewController, tableViewReload, getDict {
         addedTasks = createdTask?.tasks.sorted(byKeyPath: "name", ascending: true)
         for goal in addedTasks! {
             goals = goal.goals
+            daysToRead = goal.readDays
+            reminderTime = goal.reminderTime
         }
     }
 }
 
 //MARK: - Extension
-extension AddTask: ChildViewControllerDelegate, RemindBDProtocol, ReminderTimeProtocol, GoalProtocol,  UITextFieldDelegate {
+extension AddTask: ChildViewControllerDelegate, RemindBDProtocol, ReminderTimeProtocol, GoalProtocol,  UITextFieldDelegate, getDict, tableViewReload {
     
+    func reload() {
+        self.tableView.reloadData()
+        
+        print("Protocol with reload teblView is worked")
+    }
     
+    func getArray(dict: [RemDict]) {
+        
+       arrayFromRemBD = dict
+        
+    }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         print("changed")
         return true
     }
-    //
-    //    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
-    //        if textField.text != "" {
-    //
-    //            return true
-    //        } else {
-    //            textField.placeholder = "Type something"
-    //
-    //            return false
-    //
-    //        }
-    //
-    //    }
-    //    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    //
-    //        textField.endEditing(true)
-    //        return true
-    //    }
-    
-    //    func textFieldDidBeginEditing(_ textField: UITextField) {
-    //        reloadTable()
-    //    }
-    //    let editingChanged = UIAction { _ in
-    //        // Do something when text changes...
-    //    }
-    //    myTextField.addAction(editingChanged, for: .editingChanged)
+  
     @objc func textFieldDidChange() {
         tableView.reloadData()
     }
     
-    //    func textChanged () {
-    //        if let currentData = addedTasks?[0] {
-    //            if currentData.name != "" {
-    //                AddTask.loadedData = true
-    //                print("AddTask.loadedData chaned to true")
-    //                print(AddTask.loadedData)
-    //            } else {
-    //                AddTask.loadedData = false
-    //                print("AddTask.loadedData chaned to false")
-    //                print(AddTask.loadedData)
-    //            }
-    //        }
-    //    }
     func textFieldDidEndEditing(_ textField: UITextField) {
         let text = selectedCellIdentifier
         
@@ -654,13 +509,13 @@ extension AddTask: ChildViewControllerDelegate, RemindBDProtocol, ReminderTimePr
         print("Hi textFieldDidEndEditing delegate")
         print("\(selectedCellIdentifier) & \(homeTaskName) & \(textField.text!)")
         
-        //        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+                textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-        //        print(homeTaskName)
+                print(homeTaskName)
         
-        //        if textField.isEditing {
-        //                    tableView.reloadData()
-        //                }
+                if textField.isEditing {
+                            tableView.reloadData()
+                        }
     }
     
     func textTips(string: String) {
@@ -690,11 +545,11 @@ extension AddTask: ChildViewControllerDelegate, RemindBDProtocol, ReminderTimePr
     }
     
     func textRemindTi(text: String) {
-        
-        reminderTime = text
-        
+    
         if text == "" {
             reminderTime = "No"
+        } else {
+            reminderTime = text
         }
     }
     

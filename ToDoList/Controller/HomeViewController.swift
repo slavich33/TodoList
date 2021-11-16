@@ -107,6 +107,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                     //                    realm.delete(home, cascading: true)
                     realm.delete(home.goals)
                     realm.delete(home.remBD)
+                    realm.delete(home.remindTi)
                     realm.delete(home)
                     
                     self.tableView.reloadData()
@@ -132,10 +133,10 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
             }
 //                print(remBDequitable)
                 let listRemBD = List<RemBD>()
-                for home in homeArray! {
-                    listRemBD.append(objectsIn: home.remBD)
-                    
-                }
+//                for home in homeArray! {
+//                    listRemBD.append(objectsIn: home.remBD)
+//                    
+//                }
 //        for list in listRemBD {
 //            for rem in remBDequitable {
 //                if list.isSameObject(as: rem) {
@@ -278,7 +279,11 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
                     
                     destination.createdTask = homeArray?[indexPath.row]
                     destination.loadName()
-                    destination.daysToRead = task.arrayDays
+//                    destination.daysToRead = task.arrayDays
+//                    destination.reminderTime = task.remTi
+//                    for ti in task.remindTi {
+//                        destination.reminderTime = ti.date
+//                    }
                     //                            if task.goals != nil {
                     //                                destination.goals = ta
                     //                            }
@@ -306,11 +311,7 @@ class HomeViewController:  UIViewController, UITableViewDelegate, UITableViewDat
         // (I found that overriding dismiss in the child and calling
         // presentationController.delegate?.presentationControllerDidDismiss
         // works well).
-        var des = AddTask()
-        print(des)
-        des.goesToChilds = false
-        print(des)
-        des.validateList()
+        
         reload()
         print("Child was dismissed")
     }

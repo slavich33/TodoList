@@ -137,13 +137,14 @@ struct RemDict {
     public var day : String
     public var isSelected : Bool
    
-    
+//     init() {}
 //    var remBdDict = [0:"Monday", 1:"Tuesday", 2:"Wendsday", 3:"Thursday", 4:"Friday", 5:"Saturday", 6:"Sunday"]
     
 }
 
 extension RemDict: Persistable, Equatable {
     
+   
     
     public init(managedObject: RemBD) {
         number = managedObject.number

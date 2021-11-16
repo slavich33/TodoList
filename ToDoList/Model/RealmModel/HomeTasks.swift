@@ -11,12 +11,12 @@ import RealmSwift
 class HomeTasks: Object {
     
     @Persisted var name: String = ""
-    @Persisted var arrayDays: String = ""
-    
+   
     
     @Persisted var tasks = List<AddedTasks>()
     @Persisted var goals = List<GoalsTI>()
     @Persisted var remBD = List<RemBD>()
+    @Persisted var remindTi = List<ReminderTI>()
 }
 
 protocol DetachableObject: AnyObject {
@@ -90,4 +90,26 @@ extension List {
 
         return array
     }
+    
+//    func toDict() -> RemDict {
+//        var array = [RemDict]()
+//
+//        for i in List.init() {
+//            array.append(i)
+//        }
+//
+//
+//    }
+    
+    func getArray<T: Object>(selectedType: T.Type) -> [T]{
+            let realm = try! Realm()
+        
+            let object = realm.objects(selectedType)
+            var array = [T]()
+            for data in object {
+               array.append(data)
+           }
+            return array
+       }
 }
+

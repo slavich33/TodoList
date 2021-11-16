@@ -11,9 +11,11 @@ import RealmSwift
 class ReminderTI: Object {
     
     @Persisted var date: String = ""
-    @Persisted var uniqueKey: String = "SelectedTime"
+//    @Persisted var uniqueKey: String = "SelectedTime"
     
-    override class func primaryKey() -> String? {
-              return "uniqueKey"
-         }
+    var parentCategory = LinkingObjects(fromType: HomeTasks.self, property: "remindTi")
+    
+//    override class func primaryKey() -> String? {
+//              return "uniqueKey"
+//         }
 }

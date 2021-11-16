@@ -13,6 +13,7 @@ class AddedTasks: Object {
     @Persisted var name: String = ""
     @Persisted var goals: String = ""
     @Persisted var readDays: String = ""
+    @Persisted var reminderTime: String = ""
     
     var remBD = List<RemBD>()
     

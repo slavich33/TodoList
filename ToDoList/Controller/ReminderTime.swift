@@ -19,6 +19,11 @@ class RemindTi: UIViewController {
     var uploadedDate: Results<ReminderTI>?
     var currentDate = "No"
     let formatter = DateFormatter()
+    var createdTime: HomeTasks? {
+        didSet {
+//            loadDate()
+        }
+    }
     
     
     @IBOutlet var datePicker: UIDatePicker!
@@ -52,11 +57,18 @@ class RemindTi: UIViewController {
         
         self.delegate.textRemindTi(text: currentDate)
         
-        let newTime = ReminderTI()
-        try! realm.write{
-            newTime.date = currentDate
-            realm.add(newTime, update: .all)
-        }
+//        let newTime = ReminderTI()
+//        if let createdTime = createdTime {
+//
+//        } else {
+//            try! realm.write{
+//                newTime.date = currentDate
+//                realm.add(newTime)
+//                createdTime?.remindTi.append(newTime)
+//                print(newTime)
+//            }
+//        }
+        
     }
     
     func loadDate() {
@@ -65,16 +77,28 @@ class RemindTi: UIViewController {
         formatter.timeStyle = .short
         
         
-        uploadedDate = realm.objects(ReminderTI.self)
+//        uploadedDate = realm.objects(ReminderTI.self)
         
-        if let date = uploadedDate {
-            
-            for pickedDate in date {
-                
-                datePicker.setDate(formatter.date(from: pickedDate.date)!, animated: true)
-                
-            }
+//        if let currentCat = createdTime {
+//
+//            uploadedDate = currentCat.remindTi.sorted(byKeyPath: "date")
+//
+//        }
+        
+//        if let date = uploadedDate {
+//
+//            for pickedDate in date {
+//
+//                datePicker.setDate(formatter.date(from: pickedDate.date)!, animated: true)
+//
+//            }
+//        }
+        
+        if currentDate != "No" {
+            datePicker.setDate(formatter.date(from: currentDate)!, animated: true)
+
         }
+        
     }
 }
 

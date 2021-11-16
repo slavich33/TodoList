@@ -44,6 +44,7 @@ class RemindBD: UITableViewController {
         print(createdRemBD)
 //        calledOnce()
 //        loadItems()
+        print(dict)
     }
     
    
@@ -58,8 +59,9 @@ class RemindBD: UITableViewController {
             
             if currentCategory.remBD.first != nil {
                 
-                
-                
+            
+//                self.arrayDelegate.getArray(dict: dict)
+//                getNames()
                 print("Rembd didn;t nil")
                 
             }
@@ -130,10 +132,10 @@ class RemindBD: UITableViewController {
 //                }
                 
             }
-            self.arrayDelegate.getArray(dict: dict)
-            getNames()
+            
+            
         }
-
+        
 
 //        }
         
@@ -173,7 +175,8 @@ class RemindBD: UITableViewController {
         
        
         
-        
+        self.arrayDelegate.getArray(dict: dict)
+        getNames()
         self.navigationController?.popViewController(animated: true)
         
     }
@@ -277,21 +280,21 @@ class RemindBD: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         
         let newItem = RemBD()
-        newItem.day = days.days[indexPath.row]
+//        newItem.day = days.days[indexPath.row]
         let week = dict[indexPath.row]
-
-        if let item = cells?[indexPath.row] {
-            cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
-            cell.textLabel?.text = item.day
-            cell.accessoryType = item.isSelected ? .checkmark : .none
-            print("It's current item")
-        }
-            else {
+//
+//        if let item = cells?[indexPath.row] {
+//            cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
+//            cell.textLabel?.text = item.day
+//            cell.accessoryType = item.isSelected ? .checkmark : .none
+//            print("It's current item")
+//        }
+//            else {
             cell.textLabel?.font = UIFont.systemFont(ofSize: 14)
             cell.textLabel?.text = week.day
             cell.accessoryType = week.isSelected ? .checkmark : .none
                 print("It's current rem cells")
-        }
+//        }
         
        
 
@@ -319,7 +322,7 @@ class RemindBD: UITableViewController {
 //                    newRem.name = dict[indexPath.row].day
 //                    newRem.done = dict[indexPath.row].isSelected
 //                    newRem.uniqueKey = indexPath.row
-                    item.isSelected = !item.isSelected
+//                    item.isSelected = !item.isSelected
 //                    realm.add(newRem)
 
                 }
@@ -342,6 +345,7 @@ class RemindBD: UITableViewController {
     func getNames() {
         
 //        let res =  realm.objects(RemBD.self).filter("isSelected = true").sorted(byKeyPath: "number", ascending: true)
+//        let res =  createdRemBD?.remBD.filter("isSelected = true").sorted(byKeyPath: "number", ascending: true)
 //        var arrayNames: [String] = []
 //        if arrayNames.isEmpty {
 //
@@ -354,14 +358,15 @@ class RemindBD: UITableViewController {
 //            self.delegate.textRemindBD(text: arrayNames)
 //            print(arrayNames)
         
-        let res =  createdRemBD?.remBD.filter("isSelected = true").sorted(byKeyPath: "number", ascending: true)
+     
+        let res1 = dict.filter { $0.isSelected == true }
         var arrayNames: [String] = []
         if arrayNames.isEmpty {
-            
+
             self.delegate.textRemindBD(text: arrayNames)
         }
         
-        for n in res! {
+        for n in res1 {
             
             arrayNames.append(String(n.day.prefix(2)))
             self.delegate.textRemindBD(text: arrayNames)
